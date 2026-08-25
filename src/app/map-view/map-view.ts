@@ -10,6 +10,10 @@ import * as L from 'leaflet';
 export class MapViewComponent implements AfterViewInit, OnDestroy {
   private map?: L.Map;
 
+  readonly minZoom = 9;
+  readonly maxZoom = 14;
+  readonly zoomPercent = signal(0);
+
   @ViewChild('mapShell')
   private mapShell?: ElementRef<HTMLElement>;
 
@@ -36,12 +40,27 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.map = L.map('map', {
       zoomControl: false,
-      minZoom: 9,
-      maxZoom: 14,
+      minZoom: this.minZoom,
+      maxZoom: this.maxZoom,
+      zoomDelta: 0.8,
+      zoomSnap: 0.1,
     }).setView([53.428543, 14.552812], 13);
+
+    this.updateZoomPercent();
+    this.map.on('zoomend', () => {
+      this.updateZoomPercent();
+    });
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     }).addTo(this.map);
+  }
+
+  private updateZoomPercent(): void {
+    if (!this.map) return;
+
+    const zoom = this.map.getZoom() ?? this.minZoom;
+    const percent = ((zoom - this.minZoom) / (this.maxZoom - this.minZoom)) * 100;
+    this.zoomPercent.set(Math.round(percent));
   }
 
   ngOnDestroy(): void {
