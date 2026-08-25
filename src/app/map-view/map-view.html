@@ -3,10 +3,23 @@
 
   <div class="map-actions">
     <button type="button" (click)="zoomIn()" aria-label="Zoom in">+</button>
-    <button class="zoom-percent" type="button" disabled> {{ zoomPercent() }}%</button>
+    <button class="zoom-percent" type="button" disabled>{{ zoomPercent() }}%</button>
     <button type="button" (click)="zoomOut()" aria-label="Zoom out">−</button>
     <button type="button" (click)="centerOnReceiver()">Receiver</button>
     <button type="button" (click)="locateMe()">Use my location</button>
+    <div class="layer-picker">
+      <button class="map-action" type="button" (click)="toggleLayerMenu()" [attr.aria-expanded]="isLayerMenuOpen()">
+        Map layers
+      </button>
+
+      @if (isLayerMenuOpen()) {
+        <div class="layer-popup" role="menu">
+          <button type="button" role="menuitem" (click)="selectLayer('streets')">Streets</button>
+          <button type="button" role="menuitem" (click)="selectLayer('satellite')">Satellite</button>
+          <button type="button" role="menuitem" (click)="selectLayer('topographic')">Topographic</button>
+        </div>
+      }
+    </div>
     <button type="button" (click)="toggleFullscreen()">Full screen</button>
   </div>
 </div>

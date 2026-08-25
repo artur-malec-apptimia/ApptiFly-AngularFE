@@ -10,12 +10,14 @@ import * as L from 'leaflet';
 export class MapViewComponent implements AfterViewInit, OnDestroy {
   private map?: L.Map;
   private locationMarker?: L.CircleMarker;
+  private baseLayer?: L.TileLayer;
 
   readonly minZoom = 9;
   readonly maxZoom = 14;
   readonly zoomPercent = signal(0);
   readonly receiverLat = 53.428543;
   readonly receiverLong = 14.552812;
+  readonly isLayerMenuOpen = signal(false);
 
   @ViewChild('mapShell')
   private mapShell?: ElementRef<HTMLElement>;
@@ -54,7 +56,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       this.updateZoomPercent();
     });
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(this.map);
+    this.changeLayer('streets');
   }
 
   private updateZoomPercent(): void {
@@ -69,7 +71,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     this.map?.remove();
   }
 
-   locateMe(): void {
+  locateMe(): void {
     const map = this.map;
 
     if (!map || !navigator.geolocation) {
@@ -79,10 +81,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
 
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        const location: L.LatLngExpression = [
-          coords.latitude,
-          coords.longitude,
-        ];
+        const location: L.LatLngExpression = [coords.latitude, coords.longitude];
 
         map.setView(location, 15, { animate: true });
 
@@ -111,11 +110,47 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   centerOnReceiver(): void {
     if (!this.map) return;
 
-    const receiverLocation: L.LatLngExpression = [
-      this.receiverLat,
-      this.receiverLong,
-    ];
+    const receiverLocation: L.LatLngExpression = [this.receiverLat, this.receiverLong];
 
     this.map.setView(receiverLocation, 13, { animate: true });
+  }
+
+  changeLayer(layer: 'streets' | 'satellite' | 'topographic'): void {
+    if (!this.map) return;
+
+    this.baseLayer?.removeFrom(this.map);
+
+    if (layer === 'topographic') {
+      this.baseLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        subdomains: 'abc',
+        attribution:
+          'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA)',
+      });
+    } else if (layer === 'satellite') {
+      this.baseLayer = L.tileLayer(
+        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        {
+          maxZoom: 19,
+          attribution: 'Tiles © Esri',
+        },
+      );
+    } else {
+      this.baseLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors',
+      });
+    }
+
+    this.baseLayer.addTo(this.map);
+  }
+
+  toggleLayerMenu(): void {
+    this.isLayerMenuOpen.update((isOpen) => !isOpen);
+  }
+
+  selectLayer(layer: 'streets' | 'satellite' | 'topographic'): void {
+    this.changeLayer(layer);
+    this.isLayerMenuOpen.set(false);
   }
 }

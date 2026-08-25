@@ -42,3 +42,37 @@
     width: 100vw;
     height: 100vh;
   }
+
+  .layer-picker {
+    position: relative;
+  }
+
+  .layer-popup {
+    position: absolute;
+    top: 0;
+    right: calc(100% + 0.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 130px;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 4px 14px rgb(0 0 0 / 20%);
+  }
+
+  .layer-popup button {
+    background: #f3f4f6;
+    color: #111827;
+    text-align: left;
+  }
+
+  .layer-popup button:hover {
+    background: #e5e7eb;
+  }
+
+  .layer-picker > .map-action {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
