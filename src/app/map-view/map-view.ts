@@ -9,6 +9,7 @@ import * as L from 'leaflet';
 })
 export class MapViewComponent implements AfterViewInit, OnDestroy {
   private map?: L.Map;
+  private locationMarker?: L.CircleMarker;
 
   readonly minZoom = 9;
   readonly maxZoom = 14;
@@ -51,8 +52,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       this.updateZoomPercent();
     });
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    }).addTo(this.map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(this.map);
   }
 
   private updateZoomPercent(): void {
@@ -67,7 +67,42 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     this.map?.remove();
   }
 
-  locateMe(): void {
-    console.log('Locate me button clicked');
+   locateMe(): void {
+    const map = this.map;
+
+    if (!map || !navigator.geolocation) {
+      console.error('Geolocation is not supported by this browser.');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const location: L.LatLngExpression = [
+          coords.latitude,
+          coords.longitude,
+        ];
+
+        map.setView(location, 15, { animate: true });
+
+        this.locationMarker?.remove();
+        this.locationMarker = L.circleMarker(location, {
+          radius: 9,
+          color: '#ffffff',
+          weight: 3,
+          fillColor: '#2563eb',
+          fillOpacity: 1,
+        })
+          .addTo(map)
+          .openPopup();
+      },
+      (error) => {
+        console.error('Unable to retrieve location:', error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10_000,
+        maximumAge: 0,
+      },
+    );
   }
 }
