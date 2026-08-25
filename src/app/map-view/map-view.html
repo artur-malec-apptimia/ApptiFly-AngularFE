@@ -2,24 +2,59 @@
   <div id="map"></div>
 
   <div class="map-actions">
-    <button type="button" (click)="zoomIn()" aria-label="Zoom in">+</button>
-    <button class="zoom-percent" type="button" disabled>{{ zoomPercent() }}%</button>
-    <button type="button" (click)="zoomOut()" aria-label="Zoom out">−</button>
-    <button type="button" (click)="centerOnReceiver()">Receiver</button>
-    <button type="button" (click)="locateMe()">Use my location</button>
+    <button class="map-action icon-button" type="button" (click)="zoomIn()" aria-label="Zoom in">
+      +
+    </button>
+    <output class="zoom-percent" aria-label="Current zoom"> {{ zoomPercent() }}% </output>
+    <button class="map-action icon-button" type="button" (click)="zoomOut()" aria-label="Zoom out">
+      −
+    </button>
+    <button
+      class="map-action icon-button"
+      type="button"
+      (click)="centerOnReceiver()"
+      aria-label="Receiver"
+    >
+      <img src="icons/ReceiverIcon.png" alt="" />
+    </button>
+    <button
+      class="map-action icon-button"
+      type="button"
+      (click)="locateMe()"
+      aria-label="Use my location"
+    >
+      <img src="icons/LocationIcon.png" alt="" />
+    </button>
     <div class="layer-picker">
-      <button class="map-action" type="button" (click)="toggleLayerMenu()" [attr.aria-expanded]="isLayerMenuOpen()">
-        Map layers
+      <button
+        class="map-action icon-button"
+        type="button"
+        (click)="toggleLayerMenu()"
+        [attr.aria-expanded]="isLayerMenuOpen()"
+        aria-label="Map layers"
+      >
+        <img src="icons/LayersIcon.png" alt="" />
       </button>
 
       @if (isLayerMenuOpen()) {
         <div class="layer-popup" role="menu">
           <button type="button" role="menuitem" (click)="selectLayer('streets')">Streets</button>
-          <button type="button" role="menuitem" (click)="selectLayer('satellite')">Satellite</button>
-          <button type="button" role="menuitem" (click)="selectLayer('topographic')">Topographic</button>
+          <button type="button" role="menuitem" (click)="selectLayer('satellite')">
+            Satellite
+          </button>
+          <button type="button" role="menuitem" (click)="selectLayer('topographic')">
+            Topographic
+          </button>
         </div>
       }
     </div>
-    <button type="button" (click)="toggleFullscreen()">Full screen</button>
+    <button
+      class="map-action icon-button"
+      type="button"
+      (click)="toggleFullscreen()"
+      aria-label="Full screen"
+    >
+      <img src="icons/FullScreenIcon.png" alt="" />
+    </button>
   </div>
 </div>

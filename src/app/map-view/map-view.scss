@@ -16,26 +16,25 @@
   .map-actions {
     position: absolute;
     z-index: 1000;
-    top: 10px;
-    right: 10px;
-    display: flex;
+    top: 20px;
+    right: 40px;
+    display: grid;
     flex-direction: column;
     gap: 0.5rem;
+    place-items: center;
   }
 
-  .map-actions button {
-    min-width: 36px;
-    padding: 0.75rem 1rem;
-    border: 0;
-    border-radius: 0.5rem;
-    background: #2563eb;
-    color: white;
-    cursor: pointer;
-  }
-
-  .map-actions button[aria-label] {
+  .map-actions button.icon-button {
+    display: grid;
+    width: 36px;
+    height: 36px;
     padding: 0;
-    font-size: 1.5rem;
+    place-items: center;
+    line-height: 0;
+    background: #1d1d1d; // button background
+    color: #ffffff;
+    font-size: 1.25rem;
+    border-radius: 0.5rem;
   }
 
   .map-shell:fullscreen {
@@ -75,4 +74,21 @@
     display: block;
     width: 100%;
     box-sizing: border-box;
+  }
+
+   .icon-button img {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+  }
+
+  .zoom-percent {
+    display: grid;
+    width: 36px;
+    height: 36px;
+    place-items: center;
+    border-radius: 0.5rem;
+    background: #1d1d1d;
+    color: #ffffff;
+    font-size: 0.8rem;
   }
