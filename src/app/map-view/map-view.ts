@@ -14,6 +14,8 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   readonly minZoom = 9;
   readonly maxZoom = 14;
   readonly zoomPercent = signal(0);
+  readonly receiverLat = 53.428543;
+  readonly receiverLong = 14.552812;
 
   @ViewChild('mapShell')
   private mapShell?: ElementRef<HTMLElement>;
@@ -45,7 +47,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       maxZoom: this.maxZoom,
       zoomDelta: 0.8,
       zoomSnap: 0.1,
-    }).setView([53.428543, 14.552812], 13);
+    }).setView([this.receiverLat, this.receiverLong], 13);
 
     this.updateZoomPercent();
     this.map.on('zoomend', () => {
@@ -104,5 +106,16 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
         maximumAge: 0,
       },
     );
+  }
+
+  centerOnReceiver(): void {
+    if (!this.map) return;
+
+    const receiverLocation: L.LatLngExpression = [
+      this.receiverLat,
+      this.receiverLong,
+    ];
+
+    this.map.setView(receiverLocation, 13, { animate: true });
   }
 }
