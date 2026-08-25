@@ -13,11 +13,18 @@
     height: 100%;
   }
 
-  .locate-button {
+  .map-actions {
     position: absolute;
-    z-index: 1000; // above Leaflet controls and tiles
-    top: 80px;
+    z-index: 1000;
+    top: 10px;
     right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .map-actions button {
+    min-width: 36px;
     padding: 0.75rem 1rem;
     border: 0;
     border-radius: 0.5rem;
@@ -26,18 +33,9 @@
     cursor: pointer;
   }
 
-  .fullscreen-button {
-    position: absolute;
-    z-index: 1000;
-    top: 125px; // below zoom and location buttons
-    right: 10px;
-
-    padding: 0.75rem 1rem;
-    border: 0;
-    border-radius: 0.5rem;
-    background: #2563eb;
-    color: white;
-    cursor: pointer;
+  .map-actions button[aria-label] {
+    padding: 0;
+    font-size: 1.5rem;
   }
 
   .map-shell:fullscreen {

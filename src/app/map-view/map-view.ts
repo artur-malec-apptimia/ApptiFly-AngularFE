@@ -10,7 +10,7 @@ import * as L from 'leaflet';
 export class MapViewComponent implements AfterViewInit, OnDestroy {
   private map?: L.Map;
 
-    @ViewChild('mapShell')
+  @ViewChild('mapShell')
   private mapShell?: ElementRef<HTMLElement>;
 
   async toggleFullscreen(): Promise<void> {
@@ -25,25 +25,30 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-    ngAfterViewInit(): void {
-       this.map = L.map('map', {
-        zoomControl: false,
-        }).setView([53.428543, 14.552812], 13);
+  zoomIn(): void {
+    this.map?.zoomIn();
+  }
 
-      L.control.zoom({
-      position: 'topright',
-      }).addTo(this.map);
+  zoomOut(): void {
+    this.map?.zoomOut();
+  }
 
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-      }).addTo(this.map);
-    }
+  ngAfterViewInit(): void {
+    this.map = L.map('map', {
+      zoomControl: false,
+      minZoom: 9,
+      maxZoom: 14,
+    }).setView([53.428543, 14.552812], 13);
 
-    ngOnDestroy(): void {
-      this.map?.remove();
-    }
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    }).addTo(this.map);
+  }
 
-    locateMe(): void {
-      console.log('Locate me button clicked');
-    }
+  ngOnDestroy(): void {
+    this.map?.remove();
+  }
+
+  locateMe(): void {
+    console.log('Locate me button clicked');
+  }
 }
