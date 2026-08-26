@@ -1,6 +1,69 @@
 .panel {
-    height: 180px;
-    width: calc(100dvw - 280px);
-    border-radius: 16px;
-    background: #1d1d1d;
-  }
+  --header-height: 48px;
+
+  height: 180px;
+  width: calc(100dvw - 280px);
+  border-radius: 10px;
+  background: #1d1d1d;
+  transform: translateY(0);
+  transition: transform 250ms ease;
+  will-change: transform;
+}
+
+.panel-header {
+  display: flex;
+  width: 100%;
+  height: var(--header-height);
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 16px;
+  border: 0;
+  background: #1d1d1d;
+  color: #fafafa;
+  text-align: left;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 250ms ease;
+}
+
+.panel-header:hover {
+  background-color: #272727;
+}
+
+.panel.is-hidden {
+  transform: translateY(calc(100% - var(--header-height)));
+}
+
+.panel-topbar {
+  display: flex;
+  height: var(--header-height);
+}
+
+.panel-toggle {
+  width: var(--header-height);
+  border: 0;
+  background: #1d1d1d;
+  color: #fafafa;
+  cursor: pointer;
+}
+
+.panel-toggle-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  opacity: 0.7;
+  filter: brightness(0) invert(1);
+  transition: opacity 150ms ease;
+}
+
+.panel-toggle-icon.is-collapsed {
+  transform: rotate(180deg);
+}
+
+.panel-header:hover .panel-toggle-icon,
+.panel-header:focus-visible .panel-toggle-icon {
+  opacity: 1;
+}

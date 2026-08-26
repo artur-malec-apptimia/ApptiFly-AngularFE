@@ -1,1 +1,24 @@
-<section class="panel"></section>
+<section class="panel" [class.is-hidden]="!isVisible()">
+  <div class="panel-topbar">
+    <button
+      class="panel-header"
+      type="button"
+      (click)="toggle()"
+      [attr.aria-expanded]="isVisible()"
+      [attr.aria-label]="isVisible() ? 'Collapse aircraft panel' : 'Expand aircraft panel'"
+    >
+      <span>Aircraft</span>
+
+      <img
+        class="panel-toggle-icon"
+        [class.is-collapsed]="!isVisible()"
+        src="icons/Chevron.png"
+        alt=""
+      />
+    </button>
+  </div>
+
+  <div class="panel-content">
+    <!-- Aircraft content goes here later -->
+  </div>
+</section>

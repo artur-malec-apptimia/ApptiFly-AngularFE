@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-bottom-panel',
@@ -6,4 +6,10 @@ import { Component } from '@angular/core';
   templateUrl: './bottom-panel.html',
   styleUrl: './bottom-panel.scss',
 })
-export class BottomPanel {}
+export class BottomPanel {
+  readonly isVisible = signal(true);
+
+  toggle(): void {
+    this.isVisible.update((visible) => !visible);
+  }
+}
