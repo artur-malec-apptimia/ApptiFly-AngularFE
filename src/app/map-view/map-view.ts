@@ -1,9 +1,11 @@
 import { Component, signal, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import * as L from 'leaflet';
+import { LeftPanel } from './left-panel/left-panel';
+import { BottomPanel } from './bottom-panel/bottom-panel';
 
 @Component({
   selector: 'app-map-view',
-  imports: [],
+  imports: [LeftPanel, BottomPanel],
   templateUrl: './map-view.html',
   styleUrl: './map-view.scss',
 })

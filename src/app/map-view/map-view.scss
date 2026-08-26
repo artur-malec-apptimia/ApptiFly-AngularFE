@@ -160,3 +160,23 @@
   .map-actions button[aria-label]:focus-visible::after {
     opacity: 1;
   }
+
+  app-left-panel,
+  app-bottom-panel {
+    position: absolute;
+    z-index: 1000;
+  }
+
+  app-left-panel {
+    top: 20px;
+    left: 20px;
+    bottom: 20px;
+    width: 320px;
+  }
+
+  app-bottom-panel {
+    right: 100px;
+    bottom: 20px;
+    left: 360px;
+    min-height: 160px;
+  }
