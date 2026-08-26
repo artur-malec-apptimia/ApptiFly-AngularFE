@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-left-panel',
@@ -6,4 +6,10 @@ import { Component } from '@angular/core';
   templateUrl: './left-panel.html',
   styleUrl: './left-panel.scss',
 })
-export class LeftPanel {}
+export class LeftPanel {
+  readonly isVisible = signal(true);
+
+  toggle(): void {
+    this.isVisible.update((visible) => !visible);
+  }
+}

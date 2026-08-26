@@ -1,6 +1,40 @@
+:host {
+  display: block;
+}
+
+.left-panel-dock {
+  display: flex;
+  align-items: flex-start;
+  transition: transform 250ms ease;
+  will-change: transform;
+}
+
+.left-panel-dock.is-hidden {
+  transform: translateX(calc(-100% + 32px));
+}
+
 .panel {
-    width: 280px;
-    height: calc(100dvh - 20px);
-    border-radius: 16px;
-    background: #1d1d1d;
-  }
+  width: 280px;
+  height: calc(100dvh - 20px);
+  border-radius: 16px;
+  background: #1d1d1d;
+}
+
+.panel.is-hidden {
+  width: 0;
+  transform: translateX(-12px);
+  pointer-events: none;
+}
+
+.left-panel-toggle {
+  width: 32px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 0 8px 8px 0;
+  background: #1d1d1d;
+  color: #fafafa;
+  font-size: 1.5rem;
+  margin-top: 100px;
+  cursor: pointer;
+}
