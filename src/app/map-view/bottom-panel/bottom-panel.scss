@@ -2,9 +2,10 @@
   --header-height: 48px;
 
   height: 180px;
-  width: calc(100dvw - 280px);
+  width: 100%;
   border-radius: 10px;
   background: #1d1d1d;
+  overflow: hidden;
   transform: translateY(0);
   transition: transform 250ms ease;
   will-change: transform;
@@ -51,8 +52,8 @@
 }
 
 .panel-toggle-icon {
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   object-fit: contain;
   opacity: 0.7;
   filter: brightness(0) invert(1);

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-left-panel',
@@ -8,8 +8,11 @@ import { Component, signal } from '@angular/core';
 })
 export class LeftPanel {
   readonly isVisible = signal(true);
+  readonly visible = input.required<boolean>();
+  readonly visibleChange = output<boolean>();
 
   toggle(): void {
     this.isVisible.update((visible) => !visible);
+    this.visibleChange.emit(this.isVisible());
   }
 }

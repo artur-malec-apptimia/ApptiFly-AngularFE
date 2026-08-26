@@ -20,6 +20,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   readonly receiverLat = 53.428543;
   readonly receiverLong = 14.552812;
   readonly isLayerMenuOpen = signal(false);
+  readonly isLeftPanelVisible = signal(true);
 
   @ViewChild('mapShell')
   private mapShell?: ElementRef<HTMLElement>;
