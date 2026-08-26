@@ -1,13 +1,20 @@
 <div class="left-panel-dock" [class.is-hidden]="!isVisible()">
-    <section class="panel" aria-label="Left panel"></section>
+  <section class="panel" aria-label="Left panel"></section>
 
-    <button
-      class="left-panel-toggle"
-      type="button"
-      (click)="toggle()"
-      [attr.aria-expanded]="isVisible()"
-      aria-label="Toggle left panel"
-    >
-      @if (isVisible()) { ‹ } @else { › }
-    </button>
-  </div>
+  <button
+    class="left-panel-toggle"
+    type="button"
+    (click)="toggle()"
+    [attr.aria-expanded]="isVisible()"
+    [attr.aria-label]="isVisible() ? 'Collapse panel' : 'Expand panel'"
+    [attr.title]="isVisible() ? 'Collapse panel' : 'Expand panel'"
+  >
+    <span class="toggle-icon">
+      @if (isVisible()) {
+        ‹
+      } @else {
+        ›
+      }
+    </span>
+  </button>
+</div>
