@@ -167,16 +167,16 @@
     z-index: 1000;
   }
 
-  app-left-panel {
+   app-left-panel {
+    position: absolute;
+    z-index: 1000;
     top: 20px;
-    left: 20px;
-    bottom: 20px;
-    width: 320px;
   }
 
   app-bottom-panel {
-    right: 100px;
-    bottom: 20px;
-    left: 360px;
-    min-height: 160px;
+    position: absolute;
+    z-index: 1000;
+    right: 20px;
+    bottom: 0px;
+    left: 280px;
   }
