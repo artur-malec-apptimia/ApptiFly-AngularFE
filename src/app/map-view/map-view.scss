@@ -84,13 +84,29 @@
     background: #1d1d1d;
     color: #fafafa;
     text-align: left;
+    border: 0;
     border-radius: 0.5rem;
     height: 36px;
     padding: 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .layer-option-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
   }
 
   .layer-popup button:hover {
     background: #e5e7eb33;
+  }
+
+  .layer-popup button:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
   }
 
   .layer-picker > .map-action {

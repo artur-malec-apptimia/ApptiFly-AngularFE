@@ -38,12 +38,17 @@
 
       @if (isLayerMenuOpen()) {
         <div class="layer-popup" role="menu">
-          <button type="button" role="menuitem" (click)="selectLayer('streets')">Streets</button>
+          <button type="button" role="menuitem" (click)="selectLayer('streets')">
+            <img class="layer-option-icon" src="icons/StreetIcon.png" alt="" />
+            <span>Streets</span>
+          </button>
           <button type="button" role="menuitem" (click)="selectLayer('satellite')">
-            Satellite
+            <img class="layer-option-icon" src="icons/SatIcon.png" alt="" />
+            <span>Satellite</span>
           </button>
           <button type="button" role="menuitem" (click)="selectLayer('topographic')">
-            Topographic
+            <img class="layer-option-icon" src="icons/TopoIcon.png" alt="" />
+            <span>Topographic</span>
           </button>
         </div>
       }
