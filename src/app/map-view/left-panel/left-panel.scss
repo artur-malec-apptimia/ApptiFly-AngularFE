@@ -17,7 +17,7 @@
   width: 280px;
   height: calc(100dvh - 20px);
   border-radius: 10px;
-  background: #1d1d1d;
+  background: #171a26;
 }
 
 .panel.is-hidden {
@@ -26,13 +26,27 @@
   pointer-events: none;
 }
 
+.panel-title {
+  margin: 0;
+  padding: 24px 20px;
+  color: #c9c9c9;
+  font-family: Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.panel-title-accent {
+  color: #f97316;
+}
+
 .left-panel-toggle {
   width: 32px;
   height: 48px;
   padding: 0;
   border: 0;
   border-radius: 0 8px 8px 0;
-  background: #1d1d1d;
+  background: #171a26;
   color: #fafafa;
   font-size: 1.5rem;
   margin-top: 100px;
