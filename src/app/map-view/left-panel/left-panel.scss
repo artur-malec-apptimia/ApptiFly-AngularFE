@@ -26,9 +26,12 @@
   pointer-events: none;
 }
 
+.panel-brand {
+  padding: 24px 20px;
+}
+
 .panel-title {
   margin: 0;
-  padding: 24px 20px;
   color: #c9c9c9;
   font-family: Arial, sans-serif;
   font-size: 28px;
@@ -38,6 +41,23 @@
 
 .panel-title-accent {
   color: #f97316;
+}
+
+.panel-byline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  color: #c9c9c9;
+  font-size: 0.75rem;
+  font-family: Arial, sans-serif;
+}
+
+.brand-logo {
+  width: 80px;
+  height: 25px;
+  object-fit: contain;
+  object-position: left center;
 }
 
 .left-panel-toggle {
