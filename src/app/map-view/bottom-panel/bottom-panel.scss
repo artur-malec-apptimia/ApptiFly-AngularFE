@@ -11,6 +11,31 @@
   will-change: transform;
 }
 
+.panel-content {
+  padding: 16px;
+}
+
+.aircraft-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.aircraft-actions button {
+  min-width: 120px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid #ffffff2e;
+  border-radius: 8px;
+  background: #272727;
+  color: #fafafa;
+  cursor: pointer;
+}
+
+.aircraft-actions button:hover {
+  background: #3a3a3a;
+}
+
 .panel-header {
   display: flex;
   width: 100%;

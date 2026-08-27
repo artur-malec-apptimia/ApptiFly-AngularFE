@@ -1,0 +1,51 @@
+ :host {
+    display: block;
+    pointer-events: none;
+  }
+
+  .right-panel {
+    width: 280px;
+    height: calc(100dvh - 20px);
+    border-radius: 10px 0 0 10px;
+    overflow: hidden;
+    background: #1d1d1d;
+    color: #fafafa;
+    transform: translateX(0);
+    pointer-events: auto;
+    transition: transform 250ms ease;
+  }
+
+  .right-panel.is-hidden {
+    pointer-events: none;
+    transform: translateX(100%);
+  }
+
+  .right-panel-header {
+    display: flex;
+    height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px 0 16px;
+    background: #272727;
+    font-weight: 600;
+  }
+
+  .right-panel-header button {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .right-panel-header button:hover {
+    background: #ffffff1a;
+  }
+
+  .right-panel-content {
+    padding: 16px;
+  }

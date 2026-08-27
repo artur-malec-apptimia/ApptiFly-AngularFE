@@ -180,9 +180,22 @@ app-bottom-panel {
   right: 0px;
   bottom: 0;
   left: 280px; // left-panel width + desired gap
-  transition: left 250ms ease;
+  transition:
+      left 250ms ease,
+      right 250ms ease;
 }
 
 app-bottom-panel.left-panel-hidden {
-    left: 0px;
+  left: 0px;
+}
+
+app-bottom-panel.right-panel-visible {
+    right: 280px; // must equal the right panel width
   }
+
+app-right-panel {
+  position: absolute;
+  z-index: 1100;
+  top: 20px;
+  right: 0;
+}

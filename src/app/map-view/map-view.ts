@@ -2,10 +2,11 @@ import { Component, signal, AfterViewInit, OnDestroy, ElementRef, ViewChild } fr
 import * as L from 'leaflet';
 import { LeftPanel } from './left-panel/left-panel';
 import { BottomPanel } from './bottom-panel/bottom-panel';
+import { RightPanel } from './right-panel/right-panel';
 
 @Component({
   selector: 'app-map-view',
-  imports: [LeftPanel, BottomPanel],
+  imports: [LeftPanel, BottomPanel, RightPanel],
   templateUrl: './map-view.html',
   styleUrl: './map-view.scss',
 })
@@ -21,6 +22,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   readonly receiverLong = 14.552812;
   readonly isLayerMenuOpen = signal(false);
   readonly isLeftPanelVisible = signal(true);
+  readonly isRightPanelVisible = signal(false);
 
   @ViewChild('mapShell')
   private mapShell?: ElementRef<HTMLElement>;

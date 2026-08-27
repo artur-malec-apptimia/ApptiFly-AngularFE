@@ -4,7 +4,15 @@
     [visible]="isLeftPanelVisible()"
     (visibleChange)="isLeftPanelVisible.set($event)"
   ></app-left-panel>
-  <app-bottom-panel [class.left-panel-hidden]="!isLeftPanelVisible()"></app-bottom-panel>
+  <app-bottom-panel
+    [class.left-panel-hidden]="!isLeftPanelVisible()"
+    [class.right-panel-visible]="isRightPanelVisible()"
+    (rightPanelOpen)="isRightPanelVisible.set(true)"
+  ></app-bottom-panel>
+  <app-right-panel
+    [visible]="isRightPanelVisible()"
+    (closed)="isRightPanelVisible.set(false)"
+  ></app-right-panel>
 
   <div class="map-actions">
     <button class="map-action icon-button" type="button" (click)="zoomIn()" aria-label="Zoom in">

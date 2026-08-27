@@ -1,0 +1,15 @@
+<aside
+  class="right-panel"
+  [class.is-hidden]="!visible()"
+  [attr.aria-hidden]="!visible()"
+  [attr.inert]="visible() ? null : ''"
+  aria-label="Details panel"
+>
+  <header class="right-panel-header">
+    <span>Details</span>
+
+    <button type="button" (click)="closed.emit()" aria-label="Close details panel">×</button>
+  </header>
+
+  <div class="right-panel-content">Panel content goes here.</div>
+</aside>
