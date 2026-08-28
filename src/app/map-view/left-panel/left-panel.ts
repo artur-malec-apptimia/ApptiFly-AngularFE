@@ -1,8 +1,11 @@
 import { Component, signal, input, output } from '@angular/core';
+import { Filters } from './filters/filters';
+import { Statistics } from './statistics/statistics';
+import { Settings } from './settings/settings';
 
 @Component({
   selector: 'app-left-panel',
-  imports: [],
+  imports: [Filters, Statistics, Settings],
   templateUrl: './left-panel.html',
   styleUrl: './left-panel.scss',
 })
