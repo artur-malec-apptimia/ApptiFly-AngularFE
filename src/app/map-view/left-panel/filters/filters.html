@@ -17,6 +17,123 @@
   </button>
 
   <div class="section-expandable">
-    <div class="section-content">Filter controls.</div>
+    <div id="filters-content" class="section-content">
+      <div class="filters-stack">
+        <label class="search-field">
+          <span class="sr-only">Search aircraft</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="10" cy="10" r="7"></circle>
+            <path d="m21 21-6-6"></path>
+          </svg>
+          <input
+            type="search"
+            placeholder="Search aircraft..."
+            [value]="search()"
+            (input)="setSearch($event)"
+          />
+        </label>
+
+        <div class="range-filter">
+          <p>Altitude (m)</p>
+
+          <div class="range-control">
+            <div class="range-track"></div>
+            <div
+              class="range-fill"
+              [style.left.%]="percent(altitudeMin(), 15000)"
+              [style.right.%]="100 - percent(altitudeMax(), 15000)"
+            ></div>
+
+            <input
+              type="range"
+              min="0"
+              max="15000"
+              [value]="altitudeMin()"
+              (input)="setAltitudeMin($event)"
+              aria-label="Minimum altitude"
+            />
+            <input
+              type="range"
+              min="0"
+              max="15000"
+              [value]="altitudeMax()"
+              (input)="setAltitudeMax($event)"
+              aria-label="Maximum altitude"
+            />
+          </div>
+
+          <div class="range-marks">
+            <span>0</span>
+            <span>7.5k</span>
+            <span>15k</span>
+          </div>
+        </div>
+
+        <div class="range-filter">
+          <p>Speed (km/h)</p>
+
+          <div class="range-control">
+            <div class="range-track"></div>
+            <div
+              class="range-fill"
+              [style.left.%]="percent(speedMin(), 1300)"
+              [style.right.%]="100 - percent(speedMax(), 1300)"
+            ></div>
+
+            <input
+              type="range"
+              min="0"
+              max="1300"
+              [value]="speedMin()"
+              (input)="setSpeedMin($event)"
+              aria-label="Minimum speed"
+            />
+            <input
+              type="range"
+              min="0"
+              max="1300"
+              [value]="speedMax()"
+              (input)="setSpeedMax($event)"
+              aria-label="Maximum speed"
+            />
+          </div>
+
+          <div class="range-marks">
+            <span>0</span>
+            <span>650</span>
+            <span>1300</span>
+          </div>
+        </div>
+
+        <div class="category-filter">
+          <p>Category</p>
+
+          <button
+            class="category-trigger"
+            type="button"
+            (click)="isCategoryMenuOpen.update((open) => !open)"
+            [attr.aria-expanded]="isCategoryMenuOpen()"
+          >
+            <span>{{ categoryLabel() }}</span>
+            <span aria-hidden="true">&#8964;</span>
+          </button>
+
+          @if (isCategoryMenuOpen()) {
+            <div class="category-options" aria-label="Aircraft categories">
+              @for (category of categories; track category) {
+                <label>
+                  <input
+                    type="checkbox"
+                    [checked]="isCategorySelected(category)"
+                    (change)="toggleCategory(category)"
+                  />
+                  <span>{{ category }}</span>
+                </label>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
   </div>
 </section>
