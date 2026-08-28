@@ -5,9 +5,12 @@
 .panel-section {
   margin: 16px 9px 0;
   overflow: hidden;
-  border: 0;
+  border: 1px solid transparent;
   border-radius: 8px;
   background: #2e2e2e;
+  transition:
+    background-color 250ms ease,
+    border-color 250ms ease;
 }
 
 .section-header {
@@ -69,4 +72,9 @@
 
 .panel-section.is-expanded .section-content {
   padding: 12px;
+}
+
+.panel-section.is-expanded {
+  border-color: #424242;
+  background: #242424;
 }
