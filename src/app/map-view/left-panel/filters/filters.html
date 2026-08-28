@@ -1,24 +1,22 @@
- <section class="panel-section">
-    <button
-      class="section-header"
-      type="button"
-      (click)="toggle()"
-      [attr.aria-expanded]="isExpanded()"
-      aria-controls="filters-content"
-    >
-      <img class="section-icon" src="icons/FiltersIcon.png" alt="" />
-      <span class="section-title">Filters</span>
-      <img
-        class="section-chevron"
-        [class.is-expanded]="isExpanded()"
-        src="icons/Chevron.png"
-        alt=""
-      />
-    </button>
+<section class="panel-section" [class.is-expanded]="isExpanded()">
+  <button
+    class="section-header"
+    type="button"
+    (click)="toggle()"
+    [attr.aria-expanded]="isExpanded()"
+    aria-controls="filters-content"
+  >
+    <img class="section-icon" src="icons/FiltersIcon.png" alt="" />
+    <span class="section-title">Filters</span>
+    <img
+      class="section-chevron"
+      [class.is-expanded]="isExpanded()"
+      src="icons/Chevron.png"
+      alt=""
+    />
+  </button>
 
-    @if (isExpanded()) {
-      <div id="filters-content" class="section-content">
-        Filter controls
-      </div>
-    }
-  </section>
+  <div class="section-expandable">
+    <div class="section-content">Filter controls.</div>
+  </div>
+</section>
