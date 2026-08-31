@@ -20,6 +20,13 @@ export class Filters {
     const selected = this.selectedCategories();
     return selected.length ? `${selected.length} selected` : 'All categories';
   });
+  readonly hasSliderChanges = computed(
+    () =>
+      this.altitudeMin() !== 0 ||
+      this.altitudeMax() !== 15_000 ||
+      this.speedMin() !== 0 ||
+      this.speedMax() !== 1_300,
+  );
 
   toggle(): void {
     this.isExpanded.update((expanded) => !expanded);
@@ -30,23 +37,71 @@ export class Filters {
   }
 
   setAltitudeMin(event: Event): void {
-    const value = Number((event.target as HTMLInputElement).value);
-    this.altitudeMin.set(Math.min(value, this.altitudeMax()));
+    const input = event.target as HTMLInputElement;
+    const value = Math.min(Number(input.value), this.altitudeMax());
+
+    input.value = String(value);
+    this.altitudeMin.set(value);
   }
 
   setAltitudeMax(event: Event): void {
-    const value = Number((event.target as HTMLInputElement).value);
-    this.altitudeMax.set(Math.max(value, this.altitudeMin()));
+    const input = event.target as HTMLInputElement;
+    const value = Math.max(Number(input.value), this.altitudeMin());
+
+    input.value = String(value);
+    this.altitudeMax.set(value);
   }
 
   setSpeedMin(event: Event): void {
-    const value = Number((event.target as HTMLInputElement).value);
-    this.speedMin.set(Math.min(value, this.speedMax()));
+    const input = event.target as HTMLInputElement;
+    const value = Math.min(Number(input.value), this.speedMax());
+
+    input.value = String(value);
+    this.speedMin.set(value);
   }
 
   setSpeedMax(event: Event): void {
-    const value = Number((event.target as HTMLInputElement).value);
+    const input = event.target as HTMLInputElement;
+    const value = Math.max(Number(input.value), this.speedMin());
+
+    input.value = String(value);
     this.speedMax.set(Math.max(value, this.speedMin()));
+  }
+
+  setAltitudeFromPointer(event: PointerEvent): void {
+    if (event.target instanceof HTMLInputElement) return;
+
+    const value = this.valueFromPointer(event, 15_000);
+    const distanceToMin = Math.abs(value - this.altitudeMin());
+    const distanceToMax = Math.abs(value - this.altitudeMax());
+
+    if (distanceToMin <= distanceToMax) {
+      this.altitudeMin.set(value);
+    } else {
+      this.altitudeMax.set(value);
+    }
+  }
+
+  setSpeedFromPointer(event: PointerEvent): void {
+    if (event.target instanceof HTMLInputElement) return;
+
+    const value = this.valueFromPointer(event, 1_300);
+    const distanceToMin = Math.abs(value - this.speedMin());
+    const distanceToMax = Math.abs(value - this.speedMax());
+
+    if (distanceToMin <= distanceToMax) {
+      this.speedMin.set(value);
+    } else {
+      this.speedMax.set(value);
+    }
+  }
+
+  private valueFromPointer(event: PointerEvent, max: number): number {
+    const element = event.currentTarget as HTMLElement;
+    const bounds = element.getBoundingClientRect();
+    const progress = Math.min(1, Math.max(0, (event.clientX - bounds.left) / bounds.width));
+
+    return Math.round(progress * max);
   }
 
   toggleCategory(category: string): void {
@@ -63,5 +118,12 @@ export class Filters {
 
   percent(value: number, max: number): number {
     return (value / max) * 100;
+  }
+
+  resetSliders(): void {
+    this.altitudeMin.set(0);
+    this.altitudeMax.set(15_000);
+    this.speedMin.set(0);
+    this.speedMax.set(1_300);
   }
 }

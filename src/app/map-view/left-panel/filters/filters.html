@@ -36,7 +36,7 @@
         <div class="range-filter">
           <p>Altitude (m)</p>
 
-          <div class="range-control">
+          <div class="range-control" (pointerdown)="setAltitudeFromPointer($event)">
             <div class="range-track"></div>
             <div
               class="range-fill"
@@ -60,6 +60,13 @@
               (input)="setAltitudeMax($event)"
               aria-label="Maximum altitude"
             />
+            <output class="range-tooltip" [style.left.%]="percent(altitudeMin(), 15000)">
+              {{ altitudeMin() }} m
+            </output>
+
+            <output class="range-tooltip" [style.left.%]="percent(altitudeMax(), 15000)">
+              {{ altitudeMax() }} m
+            </output>
           </div>
 
           <div class="range-marks">
@@ -72,7 +79,7 @@
         <div class="range-filter">
           <p>Speed (km/h)</p>
 
-          <div class="range-control">
+          <div class="range-control" (pointerdown)="setSpeedFromPointer($event)">
             <div class="range-track"></div>
             <div
               class="range-fill"
@@ -96,6 +103,13 @@
               (input)="setSpeedMax($event)"
               aria-label="Maximum speed"
             />
+            <output class="range-tooltip" [style.left.%]="percent(speedMin(), 1300)">
+              {{ speedMin() }} km/h
+            </output>
+
+            <output class="range-tooltip" [style.left.%]="percent(speedMax(), 1300)">
+              {{ speedMax() }} km/h
+            </output>
           </div>
 
           <div class="range-marks">
@@ -115,7 +129,13 @@
             [attr.aria-expanded]="isCategoryMenuOpen()"
           >
             <span>{{ categoryLabel() }}</span>
-            <span aria-hidden="true">&#8964;</span>
+            <svg class="category-chevron" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+              <path
+                d="M4.93 5.43a.45.45 0 0 0 0 .64.45.45 0 0 0 .64 0L7.5 4.14l1.93 1.93a.45.45 0 0 0 .64 0 .45.45 0 0 0 0-.64L7.82 3.18a.45.45 0 0 0-.64 0L4.93 5.43Zm5.14 4.14a.45.45 0 0 0 0-.64.45.45 0 0 0-.64 0L7.5
+      10.86 5.57 8.93a.45.45 0 0 0-.64 0 .45.45 0 0 0 0 .64l2.25 2.25c.18.18.46.18.64 0l2.25-2.25Z"
+                fill="currentColor"
+              />
+            </svg>
           </button>
 
           @if (isCategoryMenuOpen()) {
@@ -131,6 +151,12 @@
                 </label>
               }
             </div>
+          }
+          @if (hasSliderChanges()) {
+            <button class="reset-filters" type="button" (click)="resetSliders()">
+              <span class="reset-icon" aria-hidden="true">&times;</span>
+              <span>Reset filters</span>
+            </button>
           }
         </div>
       </div>
