@@ -123,10 +123,22 @@
           <p>Category</p>
 
           <div class="category-combobox">
+            @for (category of selectedCategories(); track category) {
+              <span class="selected-category">
+                {{ category }}
+                <button
+                  type="button"
+                  (click)="removeCategory(category)"
+                  [attr.aria-label]="'Remove ' + category"
+                >
+                  &times;
+                </button>
+              </span>
+            }
             <input
               type="text"
               role="combobox"
-              placeholder="All categories"
+              [placeholder]="selectedCategories().length ? '' : 'All categories'"
               autocomplete="off"
               [value]="categoryQuery()"
               [attr.aria-expanded]="isCategoryMenuOpen()"

@@ -132,12 +132,18 @@ export class Filters {
     return Math.round(progress * max);
   }
 
+  removeCategory(category: string): void {
+    this.selectedCategories.update((selected) => selected.filter((item) => item !== category));
+  }
+
   toggleCategory(category: string): void {
     this.selectedCategories.update((selected) =>
       selected.includes(category)
         ? selected.filter((item) => item !== category)
         : [...selected, category],
     );
+
+    this.categoryQuery.set('');
   }
 
   isCategorySelected(category: string): boolean {
