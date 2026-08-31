@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, ElementRef, HostListener, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-filters',
@@ -27,6 +27,34 @@ export class Filters {
       this.speedMin() !== 0 ||
       this.speedMax() !== 1_300,
   );
+  readonly categoryQuery = signal('');
+
+  readonly filteredCategories = computed(() => {
+    const query = this.categoryQuery().trim().toLowerCase();
+
+    return query
+      ? this.categories.filter((category) => category.toLowerCase().includes(query))
+      : this.categories;
+  });
+
+  @ViewChild('categoryFilter')
+  private categoryFilter?: ElementRef<HTMLElement>;
+
+  @HostListener('document:pointerdown', ['$event'])
+  closeCategoryOnOutsideClick(event: PointerEvent): void {
+    if (!this.isCategoryMenuOpen()) return;
+
+    const target = event.target;
+
+    if (target instanceof Node && !this.categoryFilter?.nativeElement.contains(target)) {
+      this.isCategoryMenuOpen.set(false);
+    }
+  }
+
+  setCategoryQuery(event: Event): void {
+    this.categoryQuery.set((event.target as HTMLInputElement).value);
+    this.isCategoryMenuOpen.set(true);
+  }
 
   toggle(): void {
     this.isExpanded.update((expanded) => !expanded);
