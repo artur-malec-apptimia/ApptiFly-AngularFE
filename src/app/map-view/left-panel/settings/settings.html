@@ -17,6 +17,126 @@
   </button>
 
   <div class="section-expandable">
-    <div class="section-content">Settings controls.</div>
+    <div id="settings-content" class="section-content">
+      <div class="settings-list">
+        <div class="setting-group">
+          <span class="setting-label">Theme</span>
+
+          <div
+            class="setting-switch"
+            [class.is-second-active]="theme() === 'light'"
+            role="group"
+            aria-label="Theme"
+          >
+            <button
+              type="button"
+              [class.is-active]="theme() === 'dark'"
+              (click)="theme.set('dark')"
+            >
+              Dark
+            </button>
+            <button
+              type="button"
+              [class.is-active]="theme() === 'light'"
+              (click)="theme.set('light')"
+            >
+              Light
+            </button>
+          </div>
+        </div>
+
+        <label class="setting-group" for="language">
+          <span class="setting-label">Language</span>
+
+          <div class="language-select" #languageSelect>
+            <button
+              class="language-trigger"
+              type="button"
+              (click)="isLanguageMenuOpen.update((open) => !open)"
+              [attr.aria-expanded]="isLanguageMenuOpen()"
+              aria-controls="language-options"
+            >
+              <span>{{ language() === 'en' ? 'English' : 'Polski' }}</span>
+
+              <svg
+                class="language-chevron"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m5 6 3-3 3 3" />
+                <path d="m5 10 3 3 3-3" />
+              </svg>
+            </button>
+
+            @if (isLanguageMenuOpen()) {
+              <div id="language-options" class="language-options">
+                <button
+                  class="language-option"
+                  type="button"
+                  [class.is-selected]="language() === 'en'"
+                  (click)="selectLanguage('en')"
+                >
+                  <span
+                    class="language-check"
+                    [class.is-visible]="language() === 'en'"
+                    aria-hidden="true"
+                  >
+                    &#10003;
+                  </span>
+                  <span>English</span>
+                </button>
+
+                <button
+                  class="language-option"
+                  type="button"
+                  [class.is-selected]="language() === 'pl'"
+                  (click)="selectLanguage('pl')"
+                >
+                  <span
+                    class="language-check"
+                    [class.is-visible]="language() === 'pl'"
+                    aria-hidden="true"
+                  >
+                    &#10003;
+                  </span>
+                  <span>Polski</span>
+                </button>
+              </div>
+            }
+          </div>
+        </label>
+
+        <div class="setting-group">
+          <span class="setting-label">Units</span>
+
+          <div
+            class="setting-switch"
+            [class.is-second-active]="units() === 'imperial'"
+            role="group"
+            aria-label="Units"
+          >
+            <button
+              type="button"
+              [class.is-active]="units() === 'metric'"
+              (click)="units.set('metric')"
+            >
+              Metric
+            </button>
+            <button
+              type="button"
+              [class.is-active]="units() === 'imperial'"
+              (click)="units.set('imperial')"
+            >
+              Imperial
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
