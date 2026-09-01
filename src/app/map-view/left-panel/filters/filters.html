@@ -148,15 +148,23 @@
             />
 
             <button
+              class="category-toggle"
               type="button"
               aria-label="Toggle categories"
               (click)="isCategoryMenuOpen.update((open) => !open)"
             >
-              <svg class="category-chevron" viewBox="0 0 15 15" fill="none" aria-hidden="true">
-                <path
-                  d="M4.93 5.43a.45.45 0 0 0 0 .64.45.45 0 0 0 .64 0L7.5 4.14l1.93 1.93a.45.45 0 0 0 .64 0 .45.45 0 0 0 0-.64L7.82 3.18a.45.45 0 0 0-.64 0L4.93 5.43Zm5.14 4.14a.45.45 0 0 0 0-.64.45.45 0 0 0-.64 0L7.510.86 5.57 8.93a.45.45 0 0 0-.64 0 .45.45 0 0 0 0 .64l2.25 2.25c.18.18.46.18.64 0l2.25-2.25Z"
-                  fill="currentColor"
-                />
+              <svg
+                class="category-chevron"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m5 6 3-3 3 3" />
+                <path d="m5 10 3 3 3-3" />
               </svg>
             </button>
           </div>
@@ -171,14 +179,22 @@
                   [attr.aria-pressed]="isCategorySelected(category)"
                   (click)="toggleCategory(category)"
                 >
-                  {{ category }}
+                  <span
+                    class="category-check"
+                    [class.is-visible]="isCategorySelected(category)"
+                    aria-hidden="true"
+                  >
+                    &#10003;
+                  </span>
+
+                  <span>{{ category }}</span>
                 </button>
               } @empty {
                 <span class="no-categories">No matching categories</span>
               }
             </div>
           }
-          @if (hasSliderChanges()) {
+          @if (hasActiveFilters()) {
             <button class="reset-filters" type="button" (click)="resetSliders()">
               <span class="reset-icon" aria-hidden="true">&times;</span>
               <span>Reset filters</span>

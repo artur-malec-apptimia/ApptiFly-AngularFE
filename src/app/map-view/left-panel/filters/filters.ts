@@ -7,12 +7,15 @@ import { Component, signal, computed, ElementRef, HostListener, ViewChild } from
   styleUrl: './filters.scss',
 })
 export class Filters {
+  readonly maximumAltitude = 15_000;
+  readonly maximumSpeed = 1_300;
+
   readonly isExpanded = signal(false);
   readonly search = signal('');
   readonly altitudeMin = signal(0);
-  readonly altitudeMax = signal(15_000);
+  readonly altitudeMax = signal(this.maximumAltitude);
   readonly speedMin = signal(0);
-  readonly speedMax = signal(1_300);
+  readonly speedMax = signal(this.maximumSpeed);
   readonly isCategoryMenuOpen = signal(false);
   readonly selectedCategories = signal<string[]>([]);
   readonly categories = ['Passenger', 'Cargo', 'Military', 'General aviation', 'Helicopter'];
@@ -20,12 +23,13 @@ export class Filters {
     const selected = this.selectedCategories();
     return selected.length ? `${selected.length} selected` : 'All categories';
   });
-  readonly hasSliderChanges = computed(
+  readonly hasActiveFilters = computed(
     () =>
       this.altitudeMin() !== 0 ||
-      this.altitudeMax() !== 15_000 ||
+      this.altitudeMax() !== this.maximumAltitude ||
       this.speedMin() !== 0 ||
-      this.speedMax() !== 1_300,
+      this.speedMax() !== this.maximumSpeed ||
+      this.selectedCategories().length > 0,
   );
   readonly categoryQuery = signal('');
 
@@ -155,9 +159,13 @@ export class Filters {
   }
 
   resetSliders(): void {
+    this.search.set('');
     this.altitudeMin.set(0);
-    this.altitudeMax.set(15_000);
+    this.altitudeMax.set(this.maximumAltitude);
     this.speedMin.set(0);
-    this.speedMax.set(1_300);
+    this.speedMax.set(this.maximumSpeed);
+    this.categoryQuery.set('');
+    this.selectedCategories.set([]);
+    this.isCategoryMenuOpen.set(false);
   }
 }

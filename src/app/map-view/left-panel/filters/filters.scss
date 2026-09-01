@@ -282,6 +282,9 @@
 
 .category-option {
   width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 6px 8px;
   border: 0;
   border-radius: 4px;
@@ -293,13 +296,19 @@
   text-align: left;
 }
 
-.category-option:hover {
-  background: #242424;
+.category-check {
+  width: 12px;
+  color: #fafafa;
+  font-size: 12px;
+  opacity: 0;
 }
 
-.category-option.is-selected {
+.category-check.is-visible {
+  opacity: 1;
+}
+
+.category-option:hover {
   background: #242424;
-  color: #fafafa;
 }
 
 .sr-only {
@@ -312,19 +321,25 @@
 }
 
 .category-chevron {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   color: #5f5f5f;
+  background: #2e2e2e;
 }
 
 .category-combobox {
+  box-sizing: border-box;
   display: flex;
+  width: 100%;
   min-height: 32px;
-  height: auto;
   flex-wrap: wrap;
   align-items: center;
   gap: 4px;
   padding-left: 4px;
+  border: 1px solid #ffffff2e;
+  border-radius: 6px;
+  background: #2e2e2e;
+  color: #c9c9c9;
 }
 
 .category-combobox input {
@@ -338,9 +353,11 @@
   height: 22px;
   align-items: center;
   padding: 0 4px 0 7px;
-  border-radius: 4px;
+  border-radius: 7px;
   background: #242424;
-  color: #fafafa;
+  color: #bebebe;
+  font-family: Arial, sans-serif;
+  font-weight: 300;
   font-size: 11px;
   white-space: nowrap;
 }
@@ -376,13 +393,25 @@
   font-size: 0.75rem;
 }
 
-.category-combobox button {
+.category-combobox > .category-toggle {
   display: grid;
   width: 32px;
+  align-self: stretch;
   padding: 0;
   place-items: center;
   border: 0;
   background: transparent;
+  color: #8f8f8f;
+  cursor: pointer;
+}
+
+.category-combobox > .category-toggle {
+  display: grid;
+  width: 15px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  background: #2e2e2e;
   color: #8f8f8f;
   cursor: pointer;
 }
