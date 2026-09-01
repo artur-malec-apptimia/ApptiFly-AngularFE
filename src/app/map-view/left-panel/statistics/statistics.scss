@@ -78,3 +78,57 @@
 .panel-section.is-expanded .section-content {
   padding: 12px;
 }
+
+.statistics-list {
+  display: grid;
+  gap: 12px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #777777;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.stat-row strong {
+  color: #c9c9c9;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.stat-row-primary {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.stat-row-primary strong {
+  color: #c9c9c9;
+  font-size: 16px;
+}
+
+.statistics-separator {
+  width: 100%;
+  height: 1px;
+  background: #ffffff1a;
+}
+
+.show-more-button {
+  width: 100%;
+  height: 30px;
+  margin-top: 4px;
+  border: 0px;
+  border-radius: 10px;
+  background: transparent;
+  color: #6fbdee;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.show-more-button:hover {
+  background: #6fbdee38;
+}

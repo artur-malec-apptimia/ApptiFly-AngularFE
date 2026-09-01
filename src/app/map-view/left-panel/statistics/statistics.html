@@ -17,6 +17,32 @@
   </button>
 
   <div class="section-expandable">
-    <div class="section-content">Statistics controls.</div>
+    <div id="statistics-content" class="section-content">
+      <div class="statistics-list">
+        <div class="stat-row stat-row-primary">
+          <span>Currently on air</span>
+          <strong>{{ currentlyOnAir() }}</strong>
+        </div>
+
+        <div class="statistics-separator"></div>
+
+        <div class="stat-row">
+          <span>Spotted Today</span>
+          <strong>{{ spottedToday() }}</strong>
+        </div>
+
+        <div class="stat-row">
+          <span>Tracked This Week</span>
+          <strong>{{ trackedThisWeek() }}</strong>
+        </div>
+
+        <div class="stat-row">
+          <span>Tracked (30 days)</span>
+          <strong>{{ trackedLastThirtyDays() }}</strong>
+        </div>
+
+        <button class="show-more-button" type="button">Show more</button>
+      </div>
+    </div>
   </div>
 </section>
