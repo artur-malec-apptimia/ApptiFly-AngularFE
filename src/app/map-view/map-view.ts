@@ -1,8 +1,9 @@
-import { Component, signal, AfterViewInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, signal, AfterViewInit, OnDestroy, ElementRef, ViewChild, inject } from '@angular/core';
 import * as L from 'leaflet';
 import { LeftPanel } from './left-panel/left-panel';
 import { BottomPanel } from './bottom-panel/bottom-panel';
 import { RightPanel } from './right-panel/right-panel';
+import { AircraftStreamService } from '../services/aircraft-stream.service';
 
 @Component({
   selector: 'app-map-view',
@@ -14,6 +15,8 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   private map?: L.Map;
   private locationMarker?: L.CircleMarker;
   private baseLayer?: L.TileLayer;
+  private aircraftSocket?: WebSocket;
+  private readonly aircraftStream = inject(AircraftStreamService);
 
   readonly minZoom = 9;
   readonly maxZoom = 14;
@@ -62,6 +65,10 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
 
     this.changeLayer('streets');
+
+    this.aircraftSocket = this.aircraftStream.connect((aircraft) => {
+      console.log('Live aircraft update:', aircraft);
+    });
   }
 
   private updateZoomPercent(): void {
@@ -73,6 +80,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.aircraftSocket?.close();
     this.map?.remove();
   }
 
