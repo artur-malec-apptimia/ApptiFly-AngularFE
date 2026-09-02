@@ -1,4 +1,5 @@
-import { Component, signal, output } from '@angular/core';
+import { Component, signal, output, input } from '@angular/core';
+import type { TrackedAircraft } from '../../services/aircraft-stream.service';
 
 @Component({
   selector: 'app-bottom-panel',
@@ -9,6 +10,7 @@ import { Component, signal, output } from '@angular/core';
 export class BottomPanel {
   readonly isVisible = signal(true);
   readonly rightPanelOpen = output<void>();
+  readonly aircraft = input.required<TrackedAircraft[]>();
 
   toggle(): void {
     this.isVisible.update((visible) => !visible);

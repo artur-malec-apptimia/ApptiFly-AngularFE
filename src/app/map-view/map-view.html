@@ -7,6 +7,7 @@
   <app-bottom-panel
     [class.left-panel-hidden]="!isLeftPanelVisible()"
     [class.right-panel-visible]="isRightPanelVisible()"
+    [aircraft]="aircraft()"
     (rightPanelOpen)="isRightPanelVisible.set(true)"
   ></app-bottom-panel>
   <app-right-panel

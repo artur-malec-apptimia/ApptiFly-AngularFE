@@ -21,8 +21,17 @@
   <div class="panel-content">
     <div class="panel-content">
       <div class="aircraft-actions" aria-label="Aircraft actions">
-        <button type="button" (click)="rightPanelOpen.emit()">Aircraft 1</button>
-        <button type="button" (click)="rightPanelOpen.emit()">Aircraft 2</button>
+        <div class="aircraft-actions" aria-label="Spotted aircraft">
+          @for (aircraft of aircraft(); track aircraft.hex) {
+            <button type="button" (click)="rightPanelOpen.emit()">
+              {{ aircraft.callsign }}
+            </button>
+          }
+
+          @if (!aircraft().length) {
+            <span class="empty-aircraft">No aircraft in range</span>
+          }
+        </div>
       </div>
     </div>
   </div>
