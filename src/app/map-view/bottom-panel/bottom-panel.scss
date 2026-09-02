@@ -46,11 +46,11 @@
   padding: 0 16px;
   border: 0;
   background: #171a26;
-  color: #fafafa;
+  color: #fafafac7;
   text-align: left;
   cursor: pointer;
   font-family: Arial, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   transition: background-color 250ms ease;
 }
@@ -83,6 +83,20 @@
   opacity: 0.7;
   filter: brightness(0) invert(1);
   transition: opacity 150ms ease;
+}
+
+.empty-aircraft {
+  color: #999;
+  display: block;
+  margin-top: -20px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.aircraft-count {
+  color: #999999a9;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
 }
 
 .panel-toggle-icon.is-collapsed {
