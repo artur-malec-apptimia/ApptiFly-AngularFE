@@ -1,4 +1,5 @@
-import { Component, ElementRef, HostListener, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
+import { UnitService } from '../../../services/unitService';
 
 @Component({
   selector: 'app-settings',
@@ -11,7 +12,8 @@ export class Settings {
   readonly isLanguageMenuOpen = signal(false);
   readonly theme = signal<'dark' | 'light'>('dark');
   readonly language = signal<'en' | 'pl'>('en');
-  readonly units = signal<'metric' | 'imperial'>('metric');
+  private readonly unitService = inject(UnitService);
+  readonly units = this.unitService.system;
 
   toggle(): void {
     this.isExpanded.update((expanded) => !expanded);

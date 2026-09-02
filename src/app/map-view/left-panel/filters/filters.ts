@@ -1,4 +1,13 @@
-import { Component, signal, computed, ElementRef, HostListener, ViewChild } from '@angular/core';
+import {
+  Component,
+  signal,
+  computed,
+  ElementRef,
+  HostListener,
+  ViewChild,
+  inject,
+} from '@angular/core';
+import { UnitService } from '../../../services/unitService';
 
 @Component({
   selector: 'app-filters',
@@ -9,7 +18,7 @@ import { Component, signal, computed, ElementRef, HostListener, ViewChild } from
 export class Filters {
   readonly maximumAltitude = 15_000;
   readonly maximumSpeed = 1_300;
-
+  readonly unitService = inject(UnitService);
   readonly isExpanded = signal(false);
   readonly search = signal('');
   readonly altitudeMin = signal(0);
@@ -41,6 +50,10 @@ export class Filters {
       : this.categories;
   });
 
+  readonly displayedMaximumAltitude = computed(() => this.altitudeForDisplay(this.maximumAltitude));
+
+  readonly displayedMaximumSpeed = computed(() => this.speedForDisplay(this.maximumSpeed));
+
   @ViewChild('categoryFilter')
   private categoryFilter?: ElementRef<HTMLElement>;
 
@@ -53,6 +66,18 @@ export class Filters {
     if (target instanceof Node && !this.categoryFilter?.nativeElement.contains(target)) {
       this.isCategoryMenuOpen.set(false);
     }
+  }
+
+  compactValue(value: number): string {
+    const rounded = Math.round(value);
+
+    if (rounded < 1_000) {
+      return String(rounded);
+    }
+
+    const thousands = rounded / 1_000;
+
+    return `${Number.isInteger(thousands) ? thousands : thousands.toFixed(1)}k`;
   }
 
   setCategoryQuery(event: Event): void {
@@ -70,34 +95,34 @@ export class Filters {
 
   setAltitudeMin(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const value = Math.min(Number(input.value), this.altitudeMax());
+    const value = Math.min(this.altitudeFromDisplay(Number(input.value)), this.altitudeMax());
 
-    input.value = String(value);
     this.altitudeMin.set(value);
+    input.value = String(this.altitudeForDisplay(value));
   }
 
   setAltitudeMax(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const value = Math.max(Number(input.value), this.altitudeMin());
+    const value = Math.max(this.altitudeFromDisplay(Number(input.value)), this.altitudeMin());
 
-    input.value = String(value);
     this.altitudeMax.set(value);
+    input.value = String(this.altitudeForDisplay(value));
   }
 
   setSpeedMin(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const value = Math.min(Number(input.value), this.speedMax());
+    const value = Math.min(this.speedFromDisplay(Number(input.value)), this.speedMax());
 
-    input.value = String(value);
     this.speedMin.set(value);
+    input.value = String(this.speedForDisplay(value));
   }
 
   setSpeedMax(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const value = Math.max(Number(input.value), this.speedMin());
+    const value = Math.max(this.speedFromDisplay(Number(input.value)), this.speedMin());
 
-    input.value = String(value);
     this.speedMax.set(Math.max(value, this.speedMin()));
+    input.value = String(this.speedForDisplay(this.speedMax()));
   }
 
   setAltitudeFromPointer(event: PointerEvent): void {
@@ -156,6 +181,24 @@ export class Filters {
 
   percent(value: number, max: number): number {
     return (value / max) * 100;
+  }
+
+  altitudeForDisplay(meters: number): number {
+    return this.unitService.system() === 'metric'
+      ? Math.round(meters)
+      : Math.round(meters * 3.28084);
+  }
+
+  altitudeFromDisplay(value: number): number {
+    return this.unitService.system() === 'metric' ? value : Math.round(value / 3.28084);
+  }
+
+  speedForDisplay(kmh: number): number {
+    return this.unitService.system() === 'metric' ? Math.round(kmh) : Math.round(kmh / 1.852);
+  }
+
+  speedFromDisplay(value: number): number {
+    return this.unitService.system() === 'metric' ? value : Math.round(value * 1.852);
   }
 
   resetSliders(): void {

@@ -34,7 +34,7 @@
         </label>
 
         <div class="range-filter">
-          <p>Altitude (m)</p>
+          <p>Altitude ({{ unitService.altitudeLabel() }})</p>
 
           <div class="range-control" (pointerdown)="setAltitudeFromPointer($event)">
             <div class="range-track"></div>
@@ -47,37 +47,38 @@
             <input
               type="range"
               min="0"
-              max="15000"
-              [value]="altitudeMin()"
+              [max]="displayedMaximumAltitude()"
+              [value]="altitudeForDisplay(altitudeMin())"
               (input)="setAltitudeMin($event)"
               aria-label="Minimum altitude"
             />
+
             <input
               type="range"
               min="0"
-              max="15000"
-              [value]="altitudeMax()"
+              [max]="displayedMaximumAltitude()"
+              [value]="altitudeForDisplay(altitudeMax())"
               (input)="setAltitudeMax($event)"
               aria-label="Maximum altitude"
             />
-            <output class="range-tooltip" [style.left.%]="percent(altitudeMin(), 15000)">
-              {{ altitudeMin() }} m
+            <output class="range-tooltip" [style.left.%]="percent(altitudeMin(), maximumAltitude)">
+              {{ altitudeForDisplay(altitudeMin()) }} {{ unitService.altitudeLabel() }}
             </output>
 
-            <output class="range-tooltip" [style.left.%]="percent(altitudeMax(), 15000)">
-              {{ altitudeMax() }} m
+            <output class="range-tooltip" [style.left.%]="percent(altitudeMax(), maximumAltitude)">
+              {{ altitudeForDisplay(altitudeMax()) }} {{ unitService.altitudeLabel() }}
             </output>
           </div>
 
           <div class="range-marks">
             <span>0</span>
-            <span>7.5k</span>
-            <span>15k</span>
+            <span>{{ compactValue(altitudeForDisplay(maximumAltitude / 2)) }}</span>
+            <span>{{ compactValue(displayedMaximumAltitude()) }}</span>
           </div>
         </div>
 
         <div class="range-filter">
-          <p>Speed (km/h)</p>
+          <p>Speed ({{ unitService.speedLabel() }})</p>
 
           <div class="range-control" (pointerdown)="setSpeedFromPointer($event)">
             <div class="range-track"></div>
@@ -90,32 +91,33 @@
             <input
               type="range"
               min="0"
-              max="1300"
-              [value]="speedMin()"
+              [max]="displayedMaximumSpeed()"
+              [value]="speedForDisplay(speedMin())"
               (input)="setSpeedMin($event)"
               aria-label="Minimum speed"
             />
+
             <input
               type="range"
               min="0"
-              max="1300"
-              [value]="speedMax()"
+              [max]="displayedMaximumSpeed()"
+              [value]="speedForDisplay(speedMax())"
               (input)="setSpeedMax($event)"
               aria-label="Maximum speed"
             />
-            <output class="range-tooltip" [style.left.%]="percent(speedMin(), 1300)">
-              {{ speedMin() }} km/h
+            <output class="range-tooltip" [style.left.%]="percent(speedMin(), maximumSpeed)">
+              {{ speedForDisplay(speedMin()) }} {{ unitService.speedLabel() }}
             </output>
 
-            <output class="range-tooltip" [style.left.%]="percent(speedMax(), 1300)">
-              {{ speedMax() }} km/h
+            <output class="range-tooltip" [style.left.%]="percent(speedMax(), maximumSpeed)">
+              {{ speedForDisplay(speedMax()) }} {{ unitService.speedLabel() }}
             </output>
           </div>
 
           <div class="range-marks">
             <span>0</span>
-            <span>650</span>
-            <span>1300</span>
+            <span>{{ speedForDisplay(maximumSpeed / 2) }}</span>
+            <span>{{ displayedMaximumSpeed() }}</span>
           </div>
         </div>
 
