@@ -10,6 +10,8 @@ export class UnitService {
 
   readonly speedLabel = computed(() => (this.system() === 'metric' ? 'km/h' : 'kt'));
 
+  readonly distanceLabel = computed(() => (this.system() === 'metric' ? 'km' : 'nm'));
+
   formatAltitude(meters: number): string {
     return this.system() === 'metric'
       ? `${Math.round(meters)} m`
@@ -18,5 +20,11 @@ export class UnitService {
 
   formatSpeed(kmh: number): string {
     return this.system() === 'metric' ? `${Math.round(kmh)} km/h` : `${Math.round(kmh / 1.852)} kt`;
+  }
+
+  formatDistance(kilometers: number): string {
+    return this.system() === 'metric'
+      ? `${Math.round(kilometers)} km`
+      : `${Math.round(kilometers * 0.539957)} nm`;
   }
 }

@@ -21,19 +21,41 @@
   </div>
 
   <div class="panel-content">
-    <div class="panel-content">
-      <div class="aircraft-actions" aria-label="Aircraft actions">
-        <div class="aircraft-actions" aria-label="Spotted aircraft">
-          @for (aircraft of aircraft(); track aircraft.hex) {
-            <button type="button" (click)="rightPanelOpen.emit()">
-              {{ aircraft.callsign }}
-            </button>
-          }
+    <div class="aircraft-actions" aria-label="Aircraft actions">
+      <div class="aircraft-actions" aria-label="Spotted aircraft">
+        <button class="aircraft-card" type="button" (click)="rightPanelOpen.emit()">
+          <strong class="aircraft-id">EXAMPLE</strong>
+          <span class="aircraft-distance">24 km</span>
 
-          @if (!aircraft().length) {
-            <span class="empty-aircraft">No aircraft detected</span>
-          }
-        </div>
+          <span class="aircraft-details">
+            <span>503 m</span>
+            <span class="aircraft-divider">|</span>
+            <span>390 km/h</span>
+          </span>
+        </button>
+        @for (aircraft of aircraft(); track aircraft.hex) {
+          <button class="aircraft-card" type="button" (click)="rightPanelOpen.emit()">
+            <strong class="aircraft-id">{{ aircraft.callsign }}</strong>
+
+            <span class="aircraft-distance">
+              @if (aircraft.distanceKm !== null) {
+                {{ unitService.formatDistance(aircraft.distanceKm) }}
+              } @else {
+                —
+              }
+            </span>
+
+            <span class="aircraft-details">
+              <span>{{ unitService.formatAltitude(aircraft.altitudeM) }}</span>
+              <span class="aircraft-divider">|</span>
+              <span>{{ unitService.formatSpeed(aircraft.speedKmh) }}</span>
+            </span>
+          </button>
+        }
+
+        @if (!aircraft().length) {
+          <span class="empty-aircraft">No aircraft detected</span>
+        }
       </div>
     </div>
   </div>

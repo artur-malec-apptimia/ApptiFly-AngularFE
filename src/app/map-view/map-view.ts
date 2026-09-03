@@ -6,12 +6,14 @@ import {
   ElementRef,
   ViewChild,
   inject,
+  effect,
 } from '@angular/core';
 import * as L from 'leaflet';
 import { LeftPanel } from './left-panel/left-panel';
 import { BottomPanel } from './bottom-panel/bottom-panel';
 import { RightPanel } from './right-panel/right-panel';
 import { AircraftStreamService } from '../services/aircraft-stream.service';
+import type { TrackedAircraft } from '../services/aircraft-stream.service';
 
 @Component({
   selector: 'app-map-view',
@@ -24,6 +26,14 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   private locationMarker?: L.CircleMarker;
   private baseLayer?: L.TileLayer;
   private readonly aircraftStream = inject(AircraftStreamService);
+  private readonly aircraftMarkers = new Map<string, L.Marker>();
+  private readonly aircraftMarkerSync = effect(() => {
+    const aircraft = this.aircraft();
+
+    if (this.map) {
+      this.syncAircraftMarkers(aircraft);
+    }
+  });
 
   readonly minZoom = 9;
   readonly maxZoom = 14;
@@ -73,6 +83,8 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     });
 
     this.changeLayer('streets');
+    this.syncAircraftMarkers(this.aircraft());
+    this.aircraftStream.setReceiverLocation(this.receiverLat, this.receiverLong);
     this.aircraftStream.start();
   }
 
@@ -131,6 +143,67 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     const receiverLocation: L.LatLngExpression = [this.receiverLat, this.receiverLong];
 
     this.map.setView(receiverLocation, 13, { animate: true });
+  }
+
+   private syncAircraftMarkers(aircraft: TrackedAircraft[]): void {
+    if (!this.map) return;
+
+    const activeAircraft = new Set<string>();
+
+    for (const plane of aircraft) {
+      if (!Number.isFinite(plane.lat) || !Number.isFinite(plane.lon)) {
+        continue;
+      }
+
+      activeAircraft.add(plane.hex);
+
+      const position: L.LatLngExpression = [plane.lat, plane.lon];
+      const icon = this.createAircraftIcon(plane.track);
+
+      const existingMarker = this.aircraftMarkers.get(plane.hex);
+
+      if (existingMarker) {
+        existingMarker.setLatLng(position);
+        existingMarker.setIcon(icon);
+      } else {
+        const marker = L.marker(position, { icon })
+          .addTo(this.map)
+          .bindTooltip(plane.callsign, {
+            direction: 'top',
+            offset: [0, -14],
+          });
+
+        this.aircraftMarkers.set(plane.hex, marker);
+      }
+    }
+
+    for (const [hex, marker] of this.aircraftMarkers) {
+      if (!activeAircraft.has(hex)) {
+        marker.remove();
+        this.aircraftMarkers.delete(hex);
+      }
+    }
+  }
+
+  private createAircraftIcon(track: number): L.DivIcon {
+    const heading = Number.isFinite(track) ? track : 0;
+
+    return L.divIcon({
+      className: 'aircraft-map-marker',
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      html: `
+        <span style="
+          display: block;
+          color: #007cc1;
+          font-size: 24px;
+          line-height: 28px;
+          text-align: center;
+          transform: rotate(${heading}deg);
+          text-shadow: 0 1px 3px #000;
+        ">✈</span>
+      `,
+    });
   }
 
   changeLayer(layer: 'streets' | 'satellite' | 'topographic'): void {

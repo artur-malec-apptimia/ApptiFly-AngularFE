@@ -19,6 +19,8 @@ export interface TrackedAircraft {
   speedKmh: number;
   lat: number;
   lon: number;
+  track: number;
+  distanceKm: number | null;
   lastSeenAt: number;
 }
 
@@ -26,10 +28,19 @@ export interface TrackedAircraft {
 export class AircraftStreamService {
   private socket?: WebSocket;
   private staleTimer?: ReturnType<typeof setInterval>;
+  readonly aircraft = computed(() => {
+    const receiver = this.receiverLocation();
 
-  private readonly aircraftByHex = signal(new Map<string, TrackedAircraft>());
+    return [...this.aircraftByHex().values()].map((aircraft) => ({
+      ...aircraft,
+      distanceKm: receiver
+        ? this.calculateDistanceKm(receiver.lat, receiver.lon, aircraft.lat, aircraft.lon)
+        : null,
+    }));
+  });
 
-  readonly aircraft = computed(() => [...this.aircraftByHex().values()]);
+  private readonly aircraftByHex = signal(new Map<string, Omit<TrackedAircraft, 'distanceKm'>>());
+  private readonly receiverLocation = signal<{ lat: number; lon: number } | null>(null);
 
   start(): void {
     if (this.socket?.readyState === WebSocket.OPEN) {
@@ -55,6 +66,7 @@ export class AircraftStreamService {
           speedKmh: raw.gs * 1.852,
           lat: raw.lat,
           lon: raw.lon,
+          track: raw.track,
           lastSeenAt: Date.now(),
         });
 
@@ -79,6 +91,31 @@ export class AircraftStreamService {
 
     clearInterval(this.staleTimer);
     this.staleTimer = undefined;
+  }
+
+  setReceiverLocation(lat: number, lon: number): void {
+    this.receiverLocation.set({ lat, lon });
+  }
+
+  private calculateDistanceKm(
+    fromLat: number,
+    fromLon: number,
+    toLat: number,
+    toLon: number,
+  ): number {
+    const earthRadiusKm = 6371;
+    const radians = (value: number) => (value * Math.PI) / 180;
+
+    const latitudeDifference = radians(toLat - fromLat);
+    const longitudeDifference = radians(toLon - fromLon);
+
+    const a =
+      Math.sin(latitudeDifference / 2) ** 2 +
+      Math.cos(radians(fromLat)) *
+        Math.cos(radians(toLat)) *
+        Math.sin(longitudeDifference / 2) ** 2;
+
+    return earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   }
 
   private startStaleAircraftCleanup(): void {
