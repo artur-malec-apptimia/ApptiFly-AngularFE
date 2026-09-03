@@ -26,6 +26,9 @@ export class Statistics implements OnInit {
 
   toggle(): void {
     this.isExpanded.update((expanded) => !expanded);
+    if (this.isExpanded()) {
+      this.loadStatistics();
+    }
   }
 
   ngOnInit(): void {
