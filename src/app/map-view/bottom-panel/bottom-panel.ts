@@ -14,8 +14,14 @@ export class BottomPanel {
   readonly rightPanelOpen = output<void>();
   readonly aircraft = input.required<TrackedAircraft[]>();
   readonly unitService = inject(UnitService);
+  readonly aircraftSelected = output<TrackedAircraft>();
 
   toggle(): void {
     this.isVisible.update((visible) => !visible);
+  }
+
+  selectAircraft(aircraft: TrackedAircraft): void {
+    this.rightPanelOpen.emit();
+    this.aircraftSelected.emit(aircraft);
   }
 }

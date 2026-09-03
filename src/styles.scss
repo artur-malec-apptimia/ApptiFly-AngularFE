@@ -1,7 +1,12 @@
 @import 'leaflet/dist/leaflet.css';
 
-  html,
-  body {
-    height: 100%;
-    margin: 0;
-  }
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+.aircraft-map-marker {
+  transition: transform 900ms linear;
+  will-change: transform;
+}

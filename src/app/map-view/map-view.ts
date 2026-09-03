@@ -145,7 +145,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     this.map.setView(receiverLocation, 13, { animate: true });
   }
 
-   private syncAircraftMarkers(aircraft: TrackedAircraft[]): void {
+  private syncAircraftMarkers(aircraft: TrackedAircraft[]): void {
     if (!this.map) return;
 
     const activeAircraft = new Set<string>();
@@ -173,6 +173,10 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
             offset: [0, -14],
           });
 
+        marker.on('click', () => {
+          this.centerOnAircraftByHex(plane.hex);
+        });
+
         this.aircraftMarkers.set(plane.hex, marker);
       }
     }
@@ -193,15 +197,18 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       iconSize: [28, 28],
       iconAnchor: [14, 14],
       html: `
-        <span style="
-          display: block;
-          color: #007cc1;
-          font-size: 24px;
-          line-height: 28px;
-          text-align: center;
-          transform: rotate(${heading}deg);
-          text-shadow: 0 1px 3px #000;
-        ">✈</span>
+        <img
+          src="icons/Plane.png"
+          alt=""
+          style="
+            display: block;
+            width: 28px;
+            height: 28px;
+            transform: rotate(${heading}deg);
+            transform-origin: center;
+            filter: drop-shadow(0 1px 3px #000);
+          "
+        />
       `,
     });
   }
@@ -243,5 +250,23 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   selectLayer(layer: 'streets' | 'satellite' | 'topographic'): void {
     this.changeLayer(layer);
     this.isLayerMenuOpen.set(false);
+  }
+
+  centerOnAircraft(aircraft: TrackedAircraft): void {
+    if (!this.map) return;
+
+    this.map.panTo([aircraft.lat, aircraft.lon], {
+      animate: true,
+      duration: 0.7,
+    });
+
+  }
+
+  private centerOnAircraftByHex(hex: string): void {
+    const aircraft = this.aircraft().find((plane) => plane.hex === hex);
+
+    if (aircraft) {
+      this.centerOnAircraft(aircraft);
+    }
   }
 }

@@ -12,14 +12,20 @@
 }
 
 .panel-content {
-  padding: 0px 16px 16px;
+  height: calc(100% - var(--header-height));
+  box-sizing: border-box;
+  padding: 8px 16px 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .aircraft-actions {
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  width: max-content;
+  min-width: 100%;
+  flex-wrap: nowrap;
   gap: 12px;
+  align-items: flex-start;
 }
 
 .aircraft-actions button {
@@ -46,18 +52,20 @@
 
 .aircraft-id {
   font-size: 14px;
+  color: #fafafab7;
 }
 
 .aircraft-distance {
-  color: #fafafa;
-  font-size: 16px;
-  font-weight: 600;
+  color: #fafafa5d;
+  font-size: 12px;
+  font-weight: 300;
 }
 
 .aircraft-details {
   display: flex;
+  align-self: center;
   gap: 7px;
-  color: #999;
+  color: #fafafab7;
   font-size: 12px;
 }
 

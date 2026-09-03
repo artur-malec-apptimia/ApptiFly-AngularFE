@@ -34,7 +34,7 @@
           </span>
         </button>
         @for (aircraft of aircraft(); track aircraft.hex) {
-          <button class="aircraft-card" type="button" (click)="rightPanelOpen.emit()">
+          <button class="aircraft-card" type="button" (click)="selectAircraft(aircraft)">
             <strong class="aircraft-id">{{ aircraft.callsign }}</strong>
 
             <span class="aircraft-distance">

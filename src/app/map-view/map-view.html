@@ -9,6 +9,7 @@
     [class.right-panel-visible]="isRightPanelVisible()"
     [aircraft]="aircraft()"
     (rightPanelOpen)="isRightPanelVisible.set(true)"
+    (aircraftSelected)="centerOnAircraft($event)"
   ></app-bottom-panel>
   <app-right-panel
     [visible]="isRightPanelVisible()"

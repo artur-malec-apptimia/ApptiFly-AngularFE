@@ -27,6 +27,8 @@ export interface TrackedAircraft {
 @Injectable({ providedIn: 'root' })
 export class AircraftStreamService {
   private socket?: WebSocket;
+  private readonly staleAfterMs = 15_000;
+  private readonly cleanupIntervalMs = 1_000;
   private staleTimer?: ReturnType<typeof setInterval>;
   readonly aircraft = computed(() => {
     const receiver = this.receiverLocation();
@@ -122,13 +124,13 @@ export class AircraftStreamService {
     clearInterval(this.staleTimer);
 
     this.staleTimer = setInterval(() => {
-      const cutoff = Date.now() - 60_000;
+      const cutoff = Date.now() - this.staleAfterMs;
 
       this.aircraftByHex.update((current) => {
         const next = new Map([...current].filter(([, aircraft]) => aircraft.lastSeenAt >= cutoff));
 
         return next;
       });
-    }, 5_000);
+    }, this.cleanupIntervalMs);
   }
 }
