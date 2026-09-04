@@ -14,6 +14,7 @@ import { BottomPanel } from './bottom-panel/bottom-panel';
 import { RightPanel } from './right-panel/right-panel';
 import { AircraftStreamService } from '../services/aircraft-stream.service';
 import type { TrackedAircraft } from '../services/aircraft-stream.service';
+import { AircraftFilterService } from '../services/aircraft-filter.service';
 
 @Component({
   selector: 'app-map-view',
@@ -26,6 +27,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   private locationMarker?: L.CircleMarker;
   private baseLayer?: L.TileLayer;
   private readonly aircraftStream = inject(AircraftStreamService);
+  private readonly aircraftFilter = inject(AircraftFilterService);
   private readonly aircraftMarkers = new Map<string, L.Marker>();
   private readonly aircraftMarkerSync = effect(() => {
     const aircraft = this.aircraft();
@@ -43,7 +45,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   readonly isLayerMenuOpen = signal(false);
   readonly isLeftPanelVisible = signal(true);
   readonly isRightPanelVisible = signal(false);
-  readonly aircraft = this.aircraftStream.aircraft;
+  readonly aircraft = this.aircraftFilter.visibleAircraft;
 
   @ViewChild('mapShell')
   private mapShell?: ElementRef<HTMLElement>;

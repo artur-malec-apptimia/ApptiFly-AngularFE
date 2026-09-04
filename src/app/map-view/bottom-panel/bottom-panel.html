@@ -23,16 +23,6 @@
   <div class="panel-content">
     <div class="aircraft-actions" aria-label="Aircraft actions">
       <div class="aircraft-actions" aria-label="Spotted aircraft">
-        <button class="aircraft-card" type="button" (click)="rightPanelOpen.emit()">
-          <strong class="aircraft-id">EXAMPLE</strong>
-          <span class="aircraft-distance">24 km</span>
-
-          <span class="aircraft-details">
-            <span>503 m</span>
-            <span class="aircraft-divider">|</span>
-            <span>390 km/h</span>
-          </span>
-        </button>
         @for (aircraft of aircraft(); track aircraft.hex) {
           <button class="aircraft-card" type="button" (click)="selectAircraft(aircraft)">
             <strong class="aircraft-id">{{ aircraft.callsign }}</strong>

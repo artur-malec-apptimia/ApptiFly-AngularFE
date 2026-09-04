@@ -8,6 +8,7 @@ import {
   inject,
 } from '@angular/core';
 import { UnitService } from '../../../services/unitService';
+import { AircraftFilterService } from '../../../services/aircraft-filter.service';
 
 @Component({
   selector: 'app-filters',
@@ -16,15 +17,16 @@ import { UnitService } from '../../../services/unitService';
   styleUrl: './filters.scss',
 })
 export class Filters {
-  readonly maximumAltitude = 15_000;
-  readonly maximumSpeed = 1_300;
   readonly unitService = inject(UnitService);
+  private readonly aircraftFilter = inject(AircraftFilterService);
+  readonly maximumAltitude = this.aircraftFilter.maximumAltitude;
+  readonly maximumSpeed = this.aircraftFilter.maximumSpeed;
   readonly isExpanded = signal(false);
   readonly search = signal('');
-  readonly altitudeMin = signal(0);
-  readonly altitudeMax = signal(this.maximumAltitude);
-  readonly speedMin = signal(0);
-  readonly speedMax = signal(this.maximumSpeed);
+  readonly altitudeMin = this.aircraftFilter.altitudeMin;
+  readonly altitudeMax = this.aircraftFilter.altitudeMax;
+  readonly speedMin = this.aircraftFilter.speedMin;
+  readonly speedMax = this.aircraftFilter.speedMax;
   readonly isCategoryMenuOpen = signal(false);
   readonly selectedCategories = signal<string[]>([]);
   readonly categories = [
