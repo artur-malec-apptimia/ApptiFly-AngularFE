@@ -125,13 +125,14 @@
           <p>Category</p>
 
           <div class="category-combobox">
-            @for (category of selectedCategories(); track category) {
+            @for (code of selectedCategories(); track code) {
               <span class="selected-category">
-                {{ category }}
+                {{ categoryName(code) }}
+
                 <button
                   type="button"
-                  (click)="removeCategory(category)"
-                  [attr.aria-label]="'Remove ' + category"
+                  (click)="removeCategory(code)"
+                  [attr.aria-label]="'Remove ' + categoryName(code)"
                 >
                   &times;
                 </button>
@@ -173,23 +174,23 @@
 
           @if (isCategoryMenuOpen()) {
             <div id="category-options" class="category-options" aria-label="Aircraft categories">
-              @for (category of filteredCategories(); track category) {
+              @for (category of filteredCategories(); track category.code) {
                 <button
                   class="category-option"
                   type="button"
-                  [class.is-selected]="isCategorySelected(category)"
-                  [attr.aria-pressed]="isCategorySelected(category)"
-                  (click)="toggleCategory(category)"
+                  [class.is-selected]="isCategorySelected(category.code)"
+                  [attr.aria-pressed]="isCategorySelected(category.code)"
+                  (click)="toggleCategory(category.code)"
                 >
                   <span
                     class="category-check"
-                    [class.is-visible]="isCategorySelected(category)"
+                    [class.is-visible]="isCategorySelected(category.code)"
                     aria-hidden="true"
                   >
-                    &#10003;
+                    ✓
                   </span>
 
-                  <span>{{ category }}</span>
+                  <span>{{ category.code }} · {{ category.label }}</span>
                 </button>
               } @empty {
                 <span class="no-categories">No matching categories</span>

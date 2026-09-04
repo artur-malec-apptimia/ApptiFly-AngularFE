@@ -1,4 +1,5 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 export interface LiveAircraft {
   now: number;
@@ -15,6 +16,7 @@ export interface LiveAircraft {
 export interface TrackedAircraft {
   hex: string;
   callsign: string;
+  category: string;
   altitudeM: number;
   speedKmh: number;
   lat: number;
@@ -24,9 +26,19 @@ export interface TrackedAircraft {
   lastSeenAt: number;
 }
 
+interface AircraftInfoResponse {
+  hex: string;
+  data: {
+    category?: unknown;
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class AircraftStreamService {
   private socket?: WebSocket;
+  private readonly http = inject(HttpClient);
+  private readonly categoryRequestsInFlight = new Set<string>();
+  private readonly categoryRetryAt = new Map<string, number>();
   private readonly staleAfterMs = 15_000;
   private readonly cleanupIntervalMs = 1_000;
   private staleTimer?: ReturnType<typeof setInterval>;
@@ -63,11 +75,13 @@ export class AircraftStreamService {
       const raw = JSON.parse(event.data) as LiveAircraft;
 
       this.aircraftByHex.update((current) => {
+        const existing = current.get(raw.hex);
         const next = new Map(current);
 
         next.set(raw.hex, {
           hex: raw.hex,
           callsign: raw.flight.trim() || raw.hex,
+          category: existing?.category ?? 'Unknown',
           altitudeM: raw.alt_baro * 0.3048,
           speedKmh: raw.gs * 1.852,
           lat: raw.lat,
@@ -78,6 +92,10 @@ export class AircraftStreamService {
 
         return next;
       });
+
+      if (this.aircraftByHex().get(raw.hex)?.category === 'Unknown') {
+        this.loadAircraftCategory(raw.hex);
+      }
     };
 
     this.socket.onerror = (error) => {
@@ -139,5 +157,58 @@ export class AircraftStreamService {
         return next;
       });
     }, this.cleanupIntervalMs);
+  }
+
+  private loadAircraftCategory(hex: string): void {
+    const retryAt = this.categoryRetryAt.get(hex) ?? 0;
+
+    if (this.categoryRequestsInFlight.has(hex) || Date.now() < retryAt) {
+      return;
+    }
+
+    this.categoryRequestsInFlight.add(hex);
+
+    console.log(`Requesting category for ${hex}`);
+
+    this.http
+      .get<AircraftInfoResponse>(`http://16.171.56.106:8080/acinfo?hex=${encodeURIComponent(hex)}`)
+      .subscribe({
+        next: (response) => {
+          const category =
+            typeof response.data.category === 'string' ? response.data.category : 'Unknown';
+
+          console.log(`Category loaded for ${hex}:`, category);
+
+          this.aircraftByHex.update((current) => {
+            const aircraft = current.get(hex);
+
+            if (!aircraft) {
+              return current;
+            }
+
+            const next = new Map(current);
+
+            next.set(hex, {
+              ...aircraft,
+              category,
+            });
+
+            return next;
+          });
+
+          if (category === 'Unknown') {
+            this.categoryRetryAt.set(hex, Date.now() + 30_000);
+          } else {
+            this.categoryRetryAt.delete(hex);
+          }
+
+          this.categoryRequestsInFlight.delete(hex);
+        },
+        error: (error) => {
+          console.error(`Could not load category for ${hex}:`, error);
+          this.categoryRetryAt.set(hex, Date.now() + 30_000);
+          this.categoryRequestsInFlight.delete(hex);
+        },
+      });
   }
 }

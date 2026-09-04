@@ -28,24 +28,24 @@ export class Filters {
   readonly speedMin = this.aircraftFilter.speedMin;
   readonly speedMax = this.aircraftFilter.speedMax;
   readonly isCategoryMenuOpen = signal(false);
-  readonly selectedCategories = signal<string[]>([]);
+  readonly selectedCategories = this.aircraftFilter.selectedCategories;
   readonly categories = [
-    'A1·Light',
-    'A2·Small',
-    'A3·Large',
-    'A4·HV Large',
-    'A5·Heavy',
-    'A6·High Performance',
-    'A7·Rotorcraft',
-    'B1·Glider',
-    'B2·Lighter-Than-Air',
-    'B3·Parachutist',
-    'B4·Ultralight',
-    'B5·Light Sport',
-    'B6·UAV',
-    'B7·Space Vehicle',
-    'C1·Emergency Vehicle',
-    'C3·Obstruction',
+    { code: 'A1', label: 'Light' },
+    { code: 'A2', label: 'Small' },
+    { code: 'A3', label: 'Large' },
+    { code: 'A4', label: 'HV Large' },
+    { code: 'A5', label: 'Heavy' },
+    { code: 'A6', label: 'High Performance' },
+    { code: 'A7', label: 'Rotorcraft' },
+    { code: 'B1', label: 'Glider' },
+    { code: 'B2', label: 'Lighter-Than-Air' },
+    { code: 'B3', label: 'Parachutist' },
+    { code: 'B4', label: 'Ultralight' },
+    { code: 'B5', label: 'Light Sport' },
+    { code: 'B6', label: 'UAV' },
+    { code: 'B7', label: 'Space Vehicle' },
+    { code: 'C1', label: 'Emergency Vehicle' },
+    { code: 'C3', label: 'Obstruction' },
   ];
   readonly categoryLabel = computed(() => {
     const selected = this.selectedCategories();
@@ -66,7 +66,11 @@ export class Filters {
     const query = this.categoryQuery().trim().toLowerCase();
 
     return query
-      ? this.categories.filter((category) => category.toLowerCase().includes(query))
+      ? this.categories.filter(
+          (category) =>
+            category.code.toLowerCase().includes(query) ||
+            category.label.toLowerCase().includes(query),
+        )
       : this.categories;
   });
 
@@ -98,6 +102,12 @@ export class Filters {
     const thousands = rounded / 1_000;
 
     return `${Number.isInteger(thousands) ? thousands : thousands.toFixed(1)}k`;
+  }
+
+  categoryName(code: string): string {
+    const category = this.categories.find((item) => item.code === code);
+
+    return category ? `${category.code} · ${category.label}` : code;
   }
 
   setCategoryQuery(event: Event): void {

@@ -10,6 +10,7 @@ export class AircraftFilterService {
   readonly altitudeMax = signal(this.maximumAltitude);
   readonly speedMin = signal(0);
   readonly speedMax = signal(this.maximumSpeed);
+  readonly selectedCategories = signal<string[]>([]);
 
   constructor(private readonly aircraftStream: AircraftStreamService) {}
 
@@ -19,6 +20,7 @@ export class AircraftFilterService {
     const speedMin = this.speedMin();
     const speedMax = this.speedMax();
     const search = this.search().trim().toLowerCase();
+    const selectedCategories = this.selectedCategories();
 
     return this.aircraftStream.aircraft().filter((aircraft) => {
       const matchesAltitude =
@@ -31,7 +33,10 @@ export class AircraftFilterService {
         aircraft.callsign.toLowerCase().includes(search) ||
         aircraft.hex.toLowerCase().includes(search);
 
-      return matchesAltitude && matchesSpeed && matchesSearch;
+      const matchesCategory =
+        selectedCategories.length === 0 || selectedCategories.includes(aircraft.category);
+
+      return matchesAltitude && matchesSpeed && matchesSearch && matchesCategory;
     });
   });
 }
