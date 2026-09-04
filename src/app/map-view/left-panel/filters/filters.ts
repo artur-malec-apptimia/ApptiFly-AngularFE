@@ -27,7 +27,24 @@ export class Filters {
   readonly speedMax = signal(this.maximumSpeed);
   readonly isCategoryMenuOpen = signal(false);
   readonly selectedCategories = signal<string[]>([]);
-  readonly categories = ['Passenger', 'Cargo', 'Military', 'General aviation', 'Helicopter'];
+  readonly categories = [
+    'A1·Light',
+    'A2·Small',
+    'A3·Large',
+    'A4·HV Large',
+    'A5·Heavy',
+    'A6·High Performance',
+    'A7·Rotorcraft',
+    'B1·Glider',
+    'B2·Lighter-Than-Air',
+    'B3·Parachutist',
+    'B4·Ultralight',
+    'B5·Light Sport',
+    'B6·UAV',
+    'B7·Space Vehicle',
+    'C1·Emergency Vehicle',
+    'C3·Obstruction',
+  ];
   readonly categoryLabel = computed(() => {
     const selected = this.selectedCategories();
     return selected.length ? `${selected.length} selected` : 'All categories';
