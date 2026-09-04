@@ -29,6 +29,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   private readonly aircraftStream = inject(AircraftStreamService);
   private readonly aircraftFilter = inject(AircraftFilterService);
   private readonly aircraftMarkers = new Map<string, L.Marker>();
+  private readonly followedAircraftHex = signal<string | null>(null);
   private readonly aircraftMarkerSync = effect(() => {
     const aircraft = this.aircraft();
 
@@ -63,10 +64,12 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   }
 
   zoomIn(): void {
+    this.stopFollowingAircraft();
     this.map?.zoomIn();
   }
 
   zoomOut(): void {
+    this.stopFollowingAircraft();
     this.map?.zoomOut();
   }
 
@@ -82,6 +85,9 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
     this.updateZoomPercent();
     this.map.on('zoomend', () => {
       this.updateZoomPercent();
+    });
+    this.map.on('dragstart', () => {
+      this.stopFollowingAircraft();
     });
 
     this.changeLayer('streets');
@@ -113,6 +119,8 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
 
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
+        this.stopFollowingAircraft();
+
         const location: L.LatLngExpression = [coords.latitude, coords.longitude];
 
         map.setView(location, 15, { animate: true });
@@ -141,6 +149,8 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
 
   centerOnReceiver(): void {
     if (!this.map) return;
+
+    this.stopFollowingAircraft();
 
     const receiverLocation: L.LatLngExpression = [this.receiverLat, this.receiverLong];
 
@@ -180,6 +190,13 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
         });
 
         this.aircraftMarkers.set(plane.hex, marker);
+      }
+
+      if (this.followedAircraftHex() === plane.hex) {
+        this.map.panTo([plane.lat, plane.lon], {
+          animate: true,
+          duration: 0.8,
+        });
       }
     }
 
@@ -257,11 +274,16 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
   centerOnAircraft(aircraft: TrackedAircraft): void {
     if (!this.map) return;
 
+    this.followedAircraftHex.set(aircraft.hex);
+
     this.map.panTo([aircraft.lat, aircraft.lon], {
       animate: true,
       duration: 0.7,
     });
+  }
 
+  private stopFollowingAircraft(): void {
+    this.followedAircraftHex.set(null);
   }
 
   private centerOnAircraftByHex(hex: string): void {

@@ -1,10 +1,12 @@
 .panel {
-  --header-height: 48px;
+  --header-height: 40px;
 
   height: 180px;
   width: 100%;
   border-radius: 10px;
-  background: #171a26;
+  background: #181b26ea;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   overflow: hidden;
   transform: translateY(0);
   transition: transform 250ms ease;
@@ -86,7 +88,7 @@
   box-sizing: border-box;
   padding: 0 16px;
   border: 0;
-  background: #171a26;
+  background: transparent;
   color: #fafafac7;
   text-align: left;
   cursor: pointer;
@@ -97,7 +99,7 @@
 }
 
 .panel-header:hover {
-  background-color: #32385244;
+  background-color: #3238524f;
 }
 
 .panel.is-hidden {

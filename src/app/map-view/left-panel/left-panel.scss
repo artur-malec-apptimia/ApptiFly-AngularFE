@@ -17,7 +17,9 @@
   width: 280px;
   height: calc(100dvh - 20px);
   border-radius: 10px;
-  background: #171a26;
+  background: #181b26ea;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 .panel.is-hidden {
