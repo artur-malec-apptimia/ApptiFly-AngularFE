@@ -22,7 +22,7 @@ export class Filters {
   readonly maximumAltitude = this.aircraftFilter.maximumAltitude;
   readonly maximumSpeed = this.aircraftFilter.maximumSpeed;
   readonly isExpanded = signal(false);
-  readonly search = signal('');
+  readonly search = this.aircraftFilter.search;
   readonly altitudeMin = this.aircraftFilter.altitudeMin;
   readonly altitudeMax = this.aircraftFilter.altitudeMax;
   readonly speedMin = this.aircraftFilter.speedMin;
@@ -53,6 +53,7 @@ export class Filters {
   });
   readonly hasActiveFilters = computed(
     () =>
+      this.search().trim().length > 0 ||
       this.altitudeMin() !== 0 ||
       this.altitudeMax() !== this.maximumAltitude ||
       this.speedMin() !== 0 ||
