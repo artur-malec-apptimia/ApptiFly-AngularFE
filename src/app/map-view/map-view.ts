@@ -15,6 +15,7 @@ import { RightPanel } from './right-panel/right-panel';
 import { AircraftStreamService } from '../services/aircraft-stream.service';
 import type { TrackedAircraft } from '../services/aircraft-stream.service';
 import { AircraftFilterService } from '../services/aircraft-filter.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-map-view',
@@ -78,7 +79,7 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       zoomControl: false,
       minZoom: this.minZoom,
       maxZoom: this.maxZoom,
-      zoomDelta: 0.8,
+      zoomDelta: 0.2,
       zoomSnap: 0.1,
     }).setView([this.receiverLat, this.receiverLong], 13);
 
@@ -216,19 +217,21 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
       iconSize: [28, 28],
       iconAnchor: [14, 14],
       html: `
-        <img
-          src="icons/Plane.png"
-          alt=""
-          style="
-            display: block;
-            width: 28px;
-            height: 28px;
-            transform: rotate(${heading}deg);
-            transform-origin: center;
-            filter: drop-shadow(0 1px 3px #000);
-          "
-        />
-      `,
+    <span
+      style="
+        display: block;
+        width: 28px;
+        height: 28px;
+        background: #ef4444;
+        transform: rotate(${heading}deg);
+        transform-origin: center;
+        filter: drop-shadow(0 1px 3px #000);
+
+        mask: url('icons/Plane.png') center / contain no-repeat;
+        -webkit-mask: url('icons/Plane.png') center / contain no-repeat;
+      "
+    ></span>
+  `,
     });
   }
 
@@ -253,10 +256,14 @@ export class MapViewComponent implements AfterViewInit, OnDestroy {
         },
       );
     } else {
-      this.baseLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors',
-      });
+      this.baseLayer = L.tileLayer(
+        `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${environment.cartoApiKey}`,
+        {
+          maxZoom: 20,
+          subdomains: 'abcd',
+          attribution: '© OpenStreetMap contributors © CARTO',
+        },
+      );
     }
 
     this.baseLayer.addTo(this.map);
