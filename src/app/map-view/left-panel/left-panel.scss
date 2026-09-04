@@ -27,7 +27,53 @@
 }
 
 .panel-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   padding: 14px 20px;
+}
+
+.brand-copy {
+  min-width: 0;
+}
+
+.connection-status {
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 20px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  border: 0px;
+  border-radius: 10px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.connection-status.is-connected {
+  background: #1d352e;
+  color: #8be799;
+}
+
+.connection-status.is-disconnected {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+.connection-icon {
+  width: 9px;
+  height: 9px;
+  background: #fca5a5;
+
+  mask: url('/icons/Wifi.png') center / contain no-repeat;
+  -webkit-mask: url('/icons/Wifi.png') center / contain no-repeat;
+}
+
+.connection-status.is-connected .connection-icon {
+  background: #8be799;
 }
 
 .panel-title {

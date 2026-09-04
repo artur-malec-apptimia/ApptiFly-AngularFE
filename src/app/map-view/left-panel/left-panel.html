@@ -1,21 +1,36 @@
 <div class="left-panel-dock" [class.is-hidden]="!isVisible()">
   <section class="panel" aria-label="Left panel">
     <div class="panel-brand">
-      <h1 class="panel-title"><span class="panel-title-accent">Appti</span>Fly</h1>
+      <div class="brand-copy">
+        <h1 class="panel-title"><span class="panel-title-accent">Appti</span>Fly</h1>
 
-      <div class="panel-logo-line">
-        <span>by</span>
+        <div class="panel-logo-line">
+          <span>by</span>
 
-        <a
-          class="brand-link"
-          href="https://www.apptimia.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Visit Apptimia website"
-        >
-          <img class="brand-logo" src="icons/apptimiaLogo.png" alt="Apptimia" />
-        </a>
+          <a
+            class="brand-link"
+            href="https://www.apptimia.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Visit Apptimia website"
+          >
+            <img class="brand-logo" src="icons/apptimiaLogo.png" alt="Apptimia" />
+          </a>
+        </div>
       </div>
+
+      <button
+        class="connection-status"
+        type="button"
+        [class.is-connected]="connectionStatus() === 'connected'"
+        [class.is-disconnected]="connectionStatus() !== 'connected'"
+        [attr.aria-label]="'Backend status: ' + connectionStatus()"
+      >
+        <span class="connection-icon" aria-hidden="true"></span>
+        <span>
+          {{ connectionStatus() === 'connected' ? 'CONNECTED' : 'DISCONNECTED' }}
+        </span>
+      </button>
     </div>
     <div class="panel-separator"></div>
     <app-filters></app-filters>

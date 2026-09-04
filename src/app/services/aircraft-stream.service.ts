@@ -40,11 +40,14 @@ export class AircraftStreamService {
         : null,
     }));
   });
-
   private readonly aircraftByHex = signal(new Map<string, Omit<TrackedAircraft, 'distanceKm'>>());
   private readonly receiverLocation = signal<{ lat: number; lon: number } | null>(null);
+  private readonly connectionState = signal<'connected' | 'disconnected'>('disconnected');
+  readonly connectionStatus = this.connectionState.asReadonly();
 
   start(): void {
+    this.connectionState.set('disconnected');
+
     if (this.socket?.readyState === WebSocket.OPEN) {
       return;
     }
@@ -52,6 +55,7 @@ export class AircraftStreamService {
     this.socket = new WebSocket('ws://16.171.56.106:8080/ws');
 
     this.socket.onopen = () => {
+      this.connectionState.set('connected');
       console.log('Connected to aircraft stream');
     };
 
@@ -77,10 +81,12 @@ export class AircraftStreamService {
     };
 
     this.socket.onerror = (error) => {
+      this.connectionState.set('disconnected');
       console.error('Aircraft stream error:', error);
     };
 
     this.socket.onclose = () => {
+      this.connectionState.set('disconnected');
       console.log('Aircraft stream disconnected');
     };
 
@@ -88,6 +94,7 @@ export class AircraftStreamService {
   }
 
   stop(): void {
+    this.connectionState.set('disconnected');
     this.socket?.close();
     this.socket = undefined;
 

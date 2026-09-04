@@ -22,7 +22,7 @@ export class Statistics implements OnInit {
   readonly currentlyOnAir = computed(() => this.aircraftStream.aircraft().length);
   readonly spottedToday = signal(0);
   readonly trackedThisWeek = signal(0);
-  readonly trackedLastThirtyDays = signal(0);
+  readonly trackedLastMonth = signal(0);
 
   toggle(): void {
     this.isExpanded.update((expanded) => !expanded);
@@ -40,7 +40,7 @@ export class Statistics implements OnInit {
       next: (data) => {
         this.spottedToday.set(data.last_day);
         this.trackedThisWeek.set(data.last_week);
-        this.trackedLastThirtyDays.set(data.last_month);
+        this.trackedLastMonth.set(data.last_month);
       },
       error: (error) => {
         console.error('Unable to load flight statistics:', error);
